@@ -1,0 +1,444 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
+C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
+	<Script file="ECDC.lua"/>
+	<Frame name="ECDC" frameStrata="LOW" toplevel="true" enableMouse="true" movable="true" parent="UIParent">
+		<Size>
+			<AbsDimension x="32" y="32"/>
+		</Size>
+			<Anchors>
+				<Anchor point="CENTER"/>
+		</Anchors>
+
+		<Scripts>
+			<OnLoad>
+				ECDC_OnLoad();
+			</OnLoad>
+			<OnEvent>
+				ECDC_OnEvent(event);
+			</OnEvent>
+			<OnUpdate>
+				ECDC_OnUpdate(arg1);
+			</OnUpdate>
+		</Scripts>
+		<Frames>
+			<Button name="ECDC_Button">
+				<Size>
+					<AbsDimension x="32" y="40"/>
+				</Size>
+				<Anchors>
+					<Anchor point="CENTER" relativeTo="ECDC" relativePoint="CENTER">
+						<Offset>
+							<AbsDimension x="0" y="8"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnLoad>
+						this:RegisterForDrag("LeftButton");
+						this:RegisterForClicks("LeftButtonUp", "RightButtonDown");
+					</OnLoad>
+					<OnDragStart>
+						ECDC_OnDragStart();
+					</OnDragStart>
+					<OnDragStop>
+						ECDC_OnDragStop();
+					</OnDragStop>
+					<OnMouseUp>
+						ECDC_OnDragStop();
+					</OnMouseUp>
+					<OnClick>
+						ECDC_Click(arg1);
+					</OnClick>
+				</Scripts>
+			</Button>
+		</Frames>
+		<Layers>
+			<Layer level="BACKGROUND">
+				<Texture name="ECDC_Tex1" file="Interface\Icons\Spell_Holy_Renew">
+					<Size>
+						<AbsDimension x="32" y="32"></AbsDimension>
+					</Size>
+					<Anchors>
+						<Anchor point="LEFT" relativeTo="ECDC" relativePoint="RIGHT">
+							<Offset>
+								<AbsDimension x="0" y="0"/>
+							</Offset>
+						</Anchor>
+					</Anchors>
+				</Texture>
+				<Texture name="ECDC_Tex2" file="Interface\Icons\Spell_Holy_Renew">
+					<Size>
+						<AbsDimension x="32" y="32"></AbsDimension>
+					</Size>
+					<Anchors>
+						<Anchor point="LEFT" relativeTo="ECDC_Tex1" relativePoint="RIGHT">
+						</Anchor>
+					</Anchors>
+				</Texture>
+				<Texture name="ECDC_Tex3" file="Interface\Icons\Spell_Holy_Renew">
+					<Size>
+						<AbsDimension x="32" y="32"></AbsDimension>
+					</Size>
+					<Anchors>
+						<Anchor point="LEFT" relativeTo="ECDC_Tex2" relativePoint="RIGHT">
+						</Anchor>
+					</Anchors>
+				</Texture>
+				<Texture name="ECDC_Tex4" file="Interface\Icons\Spell_Holy_Renew">
+					<Size>
+						<AbsDimension x="32" y="32"></AbsDimension>
+					</Size>
+					<Anchors>
+						<Anchor point="LEFT" relativeTo="ECDC_Tex3" relativePoint="RIGHT">
+						</Anchor>
+					</Anchors>
+				</Texture>
+				<Texture name="ECDC_Tex5" file="Interface\Icons\Spell_Holy_Renew">
+					<Size>
+						<AbsDimension x="32" y="32"></AbsDimension>
+					</Size>
+					<Anchors>
+						<Anchor point="LEFT" relativeTo="ECDC_Tex4" relativePoint="RIGHT">
+						</Anchor>
+					</Anchors>
+				</Texture>
+				<Texture name="ECDC_Tex6" file="Interface\Icons\Spell_Holy_Renew">
+					<Size>
+						<AbsDimension x="32" y="32"></AbsDimension>
+					</Size>
+					<Anchors>
+						<Anchor point="LEFT" relativeTo="ECDC_Tex5" relativePoint="RIGHT">
+						</Anchor>
+					</Anchors>
+				</Texture>
+				<Texture name="ECDC_Tex7" file="Interface\Icons\Spell_Holy_Renew">
+					<Size>
+						<AbsDimension x="32" y="32"></AbsDimension>
+					</Size>
+					<Anchors>
+						<Anchor point="LEFT" relativeTo="ECDC_Tex6" relativePoint="RIGHT">
+						</Anchor>
+					</Anchors>
+				</Texture>
+				<Texture name="ECDC_Tex8" file="Interface\Icons\Spell_Holy_Renew">
+					<Size>
+						<AbsDimension x="32" y="32"></AbsDimension>
+					</Size>
+					<Anchors>
+						<Anchor point="LEFT" relativeTo="ECDC_Tex7" relativePoint="RIGHT">
+						</Anchor>
+					</Anchors>
+				</Texture>
+				<Texture name="ECDC_Tex9" file="Interface\Icons\Spell_Holy_Renew">
+					<Size>
+						<AbsDimension x="32" y="32"></AbsDimension>
+					</Size>
+					<Anchors>
+						<Anchor point="LEFT" relativeTo="ECDC_Tex8" relativePoint="RIGHT">
+						</Anchor>
+					</Anchors>
+				</Texture>
+				<Texture name="ECDC_Tex10" file="Interface\Icons\Spell_Holy_Renew">
+					<Size>
+						<AbsDimension x="32" y="32"></AbsDimension>
+					</Size>
+					<Anchors>
+						<Anchor point="LEFT" relativeTo="ECDC_Tex9" relativePoint="RIGHT">
+						</Anchor>
+					</Anchors>
+				</Texture>
+
+				<FontString name="ECDC_CD1" outline="Thick" inherits="NumberFontNormalYellow">
+					<Size>
+						<AbsDimension x="32" y="12"/>
+					</Size>
+					<Anchors>
+						<Anchor point="BOTTOM" relativeTo="ECDC_Tex1" relativePoint="BOTTOM">
+							<Offset>
+								<AbsDimension x="0" y="10"/>
+							</Offset>
+						</Anchor>
+					</Anchors>
+				</FontString>
+				<FontString name="ECDC_CD2" outline="Thick" inherits="NumberFontNormalYellow">
+					<Size>
+						<AbsDimension x="32" y="12"/>
+					</Size>
+					<Anchors>
+						<Anchor point="BOTTOM" relativeTo="ECDC_Tex2" relativePoint="BOTTOM">
+							<Offset>
+								<AbsDimension x="0" y="10"/>
+							</Offset>
+						</Anchor>
+					</Anchors>
+				</FontString>
+				<FontString name="ECDC_CD3" outline="Thick" inherits="NumberFontNormalYellow">
+					<Size>
+						<AbsDimension x="32" y="12"/>
+					</Size>
+					<Anchors>
+						<Anchor point="BOTTOM" relativeTo="ECDC_Tex3" relativePoint="BOTTOM">
+							<Offset>
+								<AbsDimension x="0" y="10"/>
+							</Offset>
+						</Anchor>
+					</Anchors>
+				</FontString>
+				<FontString name="ECDC_CD4" outline="Thick" inherits="NumberFontNormalYellow">
+					<Size>
+						<AbsDimension x="32" y="12"/>
+					</Size>
+					<Anchors>
+						<Anchor point="BOTTOM" relativeTo="ECDC_Tex4" relativePoint="BOTTOM">
+							<Offset>
+								<AbsDimension x="0" y="10"/>
+							</Offset>
+						</Anchor>
+					</Anchors>
+				</FontString>
+				<FontString name="ECDC_CD5" outline="Thick" inherits="NumberFontNormalYellow">
+					<Size>
+						<AbsDimension x="32" y="12"/>
+					</Size>
+					<Anchors>
+						<Anchor point="BOTTOM" relativeTo="ECDC_Tex5" relativePoint="BOTTOM">
+							<Offset>
+								<AbsDimension x="0" y="10"/>
+							</Offset>
+						</Anchor>
+					</Anchors>
+				</FontString>
+				<FontString name="ECDC_CD6" outline="Thick" inherits="NumberFontNormalYellow">
+					<Size>
+						<AbsDimension x="32" y="12"/>
+					</Size>
+					<Anchors>
+						<Anchor point="BOTTOM" relativeTo="ECDC_Tex6" relativePoint="BOTTOM">
+							<Offset>
+								<AbsDimension x="0" y="10"/>
+							</Offset>
+						</Anchor>
+					</Anchors>
+				</FontString>
+				<FontString name="ECDC_CD7" outline="Thick" inherits="NumberFontNormalYellow">
+					<Size>
+						<AbsDimension x="32" y="12"/>
+					</Size>
+					<Anchors>
+						<Anchor point="BOTTOM" relativeTo="ECDC_Tex7" relativePoint="BOTTOM">
+							<Offset>
+								<AbsDimension x="0" y="10"/>
+							</Offset>
+						</Anchor>
+					</Anchors>
+				</FontString>
+				<FontString name="ECDC_CD8" outline="Thick" inherits="NumberFontNormalYellow">
+					<Size>
+						<AbsDimension x="32" y="12"/>
+					</Size>
+					<Anchors>
+						<Anchor point="BOTTOM" relativeTo="ECDC_Tex8" relativePoint="BOTTOM">
+							<Offset>
+								<AbsDimension x="0" y="10"/>
+							</Offset>
+						</Anchor>
+					</Anchors>
+				</FontString>
+				<FontString name="ECDC_CD9" outline="Thick" inherits="NumberFontNormalYellow">
+					<Size>
+						<AbsDimension x="32" y="12"/>
+					</Size>
+					<Anchors>
+						<Anchor point="BOTTOM" relativeTo="ECDC_Tex9" relativePoint="BOTTOM">
+							<Offset>
+								<AbsDimension x="0" y="10"/>
+							</Offset>
+						</Anchor>
+					</Anchors>
+				</FontString>
+				<FontString name="ECDC_CD10" outline="Thick" inherits="NumberFontNormalYellow">
+					<Size>
+						<AbsDimension x="32" y="12"/>
+					</Size>
+					<Anchors>
+						<Anchor point="BOTTOM" relativeTo="ECDC_Tex10" relativePoint="BOTTOM">
+							<Offset>
+								<AbsDimension x="0" y="10"/>
+							</Offset>
+						</Anchor>
+					</Anchors>
+				</FontString>
+			</Layer>
+		</Layers>
+	</Frame>
+	<Frame name="ECDC_Frame1" frameStrata="HIGH" toplevel="true" enableMouse="true" movable="true" parent="UIParent">
+		<Size>
+			<AbsDimension x="32" y="32"/>
+		</Size>
+			<Anchors>
+				<Anchor point="CENTER" relativeTo="ECDC_Tex1" relativePoint="CENTER"/>
+		</Anchors>
+
+		<Scripts>
+			<OnEnter>
+				ECDC_ToolTip(1)
+			</OnEnter>
+			<OnLeave>
+				GameTooltip:Hide()
+			</OnLeave>
+		</Scripts>
+	</Frame>
+	<Frame name="ECDC_Frame2" frameStrata="HIGH" toplevel="true" enableMouse="true" movable="true" parent="UIParent">
+		<Size>
+			<AbsDimension x="32" y="32"/>
+		</Size>
+			<Anchors>
+				<Anchor point="CENTER" relativeTo="ECDC_Tex2" relativePoint="CENTER"/>
+		</Anchors>
+
+		<Scripts>
+			<OnEnter>
+				ECDC_ToolTip(2)
+			</OnEnter>
+			<OnLeave>
+				GameTooltip:Hide()
+			</OnLeave>
+		</Scripts>
+	</Frame>
+	<Frame name="ECDC_Frame3" frameStrata="HIGH" toplevel="true" enableMouse="true" movable="true" parent="UIParent">
+		<Size>
+			<AbsDimension x="32" y="32"/>
+		</Size>
+			<Anchors>
+				<Anchor point="CENTER" relativeTo="ECDC_Tex3" relativePoint="CENTER"/>
+		</Anchors>
+
+		<Scripts>
+			<OnEnter>
+				ECDC_ToolTip(3)
+			</OnEnter>
+			<OnLeave>
+				GameTooltip:Hide()
+			</OnLeave>
+		</Scripts>
+	</Frame>
+	<Frame name="ECDC_Frame4" frameStrata="HIGH" toplevel="true" enableMouse="true" movable="true" parent="UIParent">
+		<Size>
+			<AbsDimension x="32" y="32"/>
+		</Size>
+			<Anchors>
+				<Anchor point="CENTER" relativeTo="ECDC_Tex4" relativePoint="CENTER"/>
+		</Anchors>
+
+		<Scripts>
+			<OnEnter>
+				ECDC_ToolTip(4)
+			</OnEnter>
+			<OnLeave>
+				GameTooltip:Hide()
+			</OnLeave>
+		</Scripts>
+	</Frame>
+	<Frame name="ECDC_Frame5" frameStrata="HIGH" toplevel="true" enableMouse="true" movable="true" parent="UIParent">
+		<Size>
+			<AbsDimension x="32" y="32"/>
+		</Size>
+			<Anchors>
+				<Anchor point="CENTER" relativeTo="ECDC_Tex5" relativePoint="CENTER"/>
+		</Anchors>
+
+		<Scripts>
+			<OnEnter>
+				ECDC_ToolTip(5)
+			</OnEnter>
+			<OnLeave>
+				GameTooltip:Hide()
+			</OnLeave>
+		</Scripts>
+	</Frame>
+	<Frame name="ECDC_Frame6" frameStrata="HIGH" toplevel="true" enableMouse="true" movable="true" parent="UIParent">
+		<Size>
+			<AbsDimension x="32" y="32"/>
+		</Size>
+			<Anchors>
+				<Anchor point="CENTER" relativeTo="ECDC_Tex6" relativePoint="CENTER"/>
+		</Anchors>
+
+		<Scripts>
+			<OnEnter>
+				ECDC_ToolTip(6)
+			</OnEnter>
+			<OnLeave>
+				GameTooltip:Hide()
+			</OnLeave>
+		</Scripts>
+	</Frame>
+	<Frame name="ECDC_Frame7" frameStrata="HIGH" toplevel="true" enableMouse="true" movable="true" parent="UIParent">
+		<Size>
+			<AbsDimension x="32" y="32"/>
+		</Size>
+			<Anchors>
+				<Anchor point="CENTER" relativeTo="ECDC_Tex7" relativePoint="CENTER"/>
+		</Anchors>
+
+		<Scripts>
+			<OnEnter>
+				ECDC_ToolTip(7)
+			</OnEnter>
+			<OnLeave>
+				GameTooltip:Hide()
+			</OnLeave>
+		</Scripts>
+	</Frame>
+	<Frame name="ECDC_Frame8" frameStrata="HIGH" toplevel="true" enableMouse="true" movable="true" parent="UIParent">
+		<Size>
+			<AbsDimension x="32" y="32"/>
+		</Size>
+			<Anchors>
+				<Anchor point="CENTER" relativeTo="ECDC_Tex8" relativePoint="CENTER"/>
+		</Anchors>
+
+		<Scripts>
+			<OnEnter>
+				ECDC_ToolTip(8)
+			</OnEnter>
+			<OnLeave>
+				GameTooltip:Hide()
+			</OnLeave>
+		</Scripts>
+	</Frame>
+	<Frame name="ECDC_Frame9" frameStrata="HIGH" toplevel="true" enableMouse="true" movable="true" parent="UIParent">
+		<Size>
+			<AbsDimension x="32" y="32"/>
+		</Size>
+			<Anchors>
+				<Anchor point="CENTER" relativeTo="ECDC_Tex9" relativePoint="CENTER"/>
+		</Anchors>
+
+		<Scripts>
+			<OnEnter>
+				ECDC_ToolTip(9)
+			</OnEnter>
+			<OnLeave>
+				GameTooltip:Hide()
+			</OnLeave>
+		</Scripts>
+	</Frame>
+	<Frame name="ECDC_Frame10" frameStrata="HIGH" toplevel="true" enableMouse="true" movable="true" parent="UIParent">
+		<Size>
+			<AbsDimension x="32" y="32"/>
+		</Size>
+			<Anchors>
+				<Anchor point="CENTER" relativeTo="ECDC_Tex10" relativePoint="CENTER"/>
+		</Anchors>
+
+		<Scripts>
+			<OnEnter>
+				ECDC_ToolTip(10)
+			</OnEnter>
+			<OnLeave>
+				GameTooltip:Hide()
+			</OnLeave>
+		</Scripts>
+	</Frame>
+</Ui>

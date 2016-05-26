@@ -1,0 +1,8 @@
+## Interface: 11100
+## Title: Enemy Cooldown Count
+## Version: 1.1
+## Notes: Monitors everyone's cooldowns.
+## Author: Daggith/Daggie [Korgath]
+## URL: http://www.reasonguild.com
+## SavedVariables: ECDC_Pos, ECDC_Locked
+ECDC.xml
