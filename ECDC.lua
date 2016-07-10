@@ -46,13 +46,18 @@ function ECDC_Test()
 		return
 	end
 	
-	for i, skill in ECDC_UsedSkills do
-		if skill.player == '_temp' then
-			tremove(ECDC_UsedSkills, i)
+	local temp = {}
+	for _, skill in ECDC_UsedSkills do
+		if skill.player ~= '_temp' then
+			tinsert(temp, skill)
 			break
 		end
 	end
-	table.insert(ECDC_UsedSkills, {player = '_temp', skill = "temp", info = '', texture = "temp", countdown = 7, started = time()})
+	ECDC_UsedSkills = temp
+
+	for i=1,10 do
+		table.insert(ECDC_UsedSkills, {player = '_temp', skill = "test"..i, info = '', texture = "temp", countdown = 7, started = time()})
+	end
 end
 
 function ECDC_ToolTip(tooltipnum)
