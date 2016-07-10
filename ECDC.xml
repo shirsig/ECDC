@@ -1,7 +1,7 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 	<Script file="ECDC.lua"/>
-	<Frame name="ECDC" frameStrata="LOW" toplevel="true" enableMouse="true" movable="true" parent="UIParent">
+	<Frame name="ECDC_Frame" frameStrata="LOW" toplevel="true" enableMouse="true" movable="true" parent="UIParent">
 		<Size>
 			<AbsDimension x="32" y="32"/>
 		</Size>
@@ -11,13 +11,13 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 
 		<Scripts>
 			<OnLoad>
-				ECDC_OnLoad();
+				this:RegisterEvent("ADDON_LOADED")
 			</OnLoad>
 			<OnEvent>
-				ECDC_OnEvent(event);
+				ECDC_OnEvent(event)
 			</OnEvent>
 			<OnUpdate>
-				ECDC_OnUpdate(arg1);
+				ECDC_OnUpdate(arg1)
 			</OnUpdate>
 		</Scripts>
 		<Frames>
@@ -26,7 +26,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					<AbsDimension x="32" y="40"/>
 				</Size>
 				<Anchors>
-					<Anchor point="CENTER" relativeTo="ECDC" relativePoint="CENTER">
+					<Anchor point="CENTER" relativeTo="ECDC_Frame" relativePoint="CENTER">
 						<Offset>
 							<AbsDimension x="0" y="8"/>
 						</Offset>
@@ -35,7 +35,6 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				<Scripts>
 					<OnLoad>
 						this:RegisterForDrag("LeftButton");
-						this:RegisterForClicks("LeftButtonUp", "RightButtonDown");
 					</OnLoad>
 					<OnDragStart>
 						ECDC_OnDragStart();
@@ -43,30 +42,27 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					<OnDragStop>
 						ECDC_OnDragStop();
 					</OnDragStop>
-					<OnMouseUp>
-						ECDC_OnDragStop();
-					</OnMouseUp>
 					<OnClick>
-						ECDC_Click(arg1);
+						ECDC_Click();
 					</OnClick>
 				</Scripts>
 			</Button>
 		</Frames>
 		<Layers>
 			<Layer level="BACKGROUND">
-				<Texture name="ECDC_Tex1" file="Interface\Icons\Spell_Holy_Renew">
+				<Texture name="ECDC_Tex1">
 					<Size>
 						<AbsDimension x="32" y="32"></AbsDimension>
 					</Size>
 					<Anchors>
-						<Anchor point="LEFT" relativeTo="ECDC" relativePoint="RIGHT">
+						<Anchor point="LEFT" relativeTo="ECDC_Frame" relativePoint="RIGHT">
 							<Offset>
 								<AbsDimension x="0" y="0"/>
 							</Offset>
 						</Anchor>
 					</Anchors>
 				</Texture>
-				<Texture name="ECDC_Tex2" file="Interface\Icons\Spell_Holy_Renew">
+				<Texture name="ECDC_Tex2">
 					<Size>
 						<AbsDimension x="32" y="32"></AbsDimension>
 					</Size>
@@ -75,7 +71,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 						</Anchor>
 					</Anchors>
 				</Texture>
-				<Texture name="ECDC_Tex3" file="Interface\Icons\Spell_Holy_Renew">
+				<Texture name="ECDC_Tex3">
 					<Size>
 						<AbsDimension x="32" y="32"></AbsDimension>
 					</Size>
@@ -84,7 +80,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 						</Anchor>
 					</Anchors>
 				</Texture>
-				<Texture name="ECDC_Tex4" file="Interface\Icons\Spell_Holy_Renew">
+				<Texture name="ECDC_Tex4">
 					<Size>
 						<AbsDimension x="32" y="32"></AbsDimension>
 					</Size>
@@ -93,7 +89,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 						</Anchor>
 					</Anchors>
 				</Texture>
-				<Texture name="ECDC_Tex5" file="Interface\Icons\Spell_Holy_Renew">
+				<Texture name="ECDC_Tex5">
 					<Size>
 						<AbsDimension x="32" y="32"></AbsDimension>
 					</Size>
@@ -102,7 +98,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 						</Anchor>
 					</Anchors>
 				</Texture>
-				<Texture name="ECDC_Tex6" file="Interface\Icons\Spell_Holy_Renew">
+				<Texture name="ECDC_Tex6">
 					<Size>
 						<AbsDimension x="32" y="32"></AbsDimension>
 					</Size>
@@ -111,7 +107,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 						</Anchor>
 					</Anchors>
 				</Texture>
-				<Texture name="ECDC_Tex7" file="Interface\Icons\Spell_Holy_Renew">
+				<Texture name="ECDC_Tex7">
 					<Size>
 						<AbsDimension x="32" y="32"></AbsDimension>
 					</Size>
@@ -120,7 +116,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 						</Anchor>
 					</Anchors>
 				</Texture>
-				<Texture name="ECDC_Tex8" file="Interface\Icons\Spell_Holy_Renew">
+				<Texture name="ECDC_Tex8">
 					<Size>
 						<AbsDimension x="32" y="32"></AbsDimension>
 					</Size>
@@ -129,7 +125,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 						</Anchor>
 					</Anchors>
 				</Texture>
-				<Texture name="ECDC_Tex9" file="Interface\Icons\Spell_Holy_Renew">
+				<Texture name="ECDC_Tex9">
 					<Size>
 						<AbsDimension x="32" y="32"></AbsDimension>
 					</Size>
@@ -138,7 +134,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 						</Anchor>
 					</Anchors>
 				</Texture>
-				<Texture name="ECDC_Tex10" file="Interface\Icons\Spell_Holy_Renew">
+				<Texture name="ECDC_Tex10">
 					<Size>
 						<AbsDimension x="32" y="32"></AbsDimension>
 					</Size>

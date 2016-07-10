@@ -1,36 +1,7 @@
-local cooldown = CreateFrame('Frame')
-cooldown:SetScript('OnUpdate', function()
-	this:UPDATE()
-end)
-cooldown:SetScript('OnEvent', function()
-	this[event](this)
-end)
-cooldown:RegisterEvent('ADDON_LOADED')
-
-function ECDC_OnLoad()
-	ECDC_ToolTips = {};
-	ECDC_ToolTipDetails = {};
-	ECDC_ErrCountdown = 13;
-	ECDC_UsedSkills = {};
-	ECDC_UpdateInterval = 0.1;
-	ECDC_TimeSinceLastUpdate = 0;
-
-	ECDC_GAINS = "(.+) gains (.+).";
-	ECDC_ABILITY_HITS = "(.+)'s (.+) hits (.+) for (.+)";
-	ECDC_ABILITY_CRITS = "(.+)'s (.+) crits (.+) for (.+)";
-	ECDC_ABILITY_ABSORB = "(.+)'s (.+) is absorbed by (.+).";
-	ECDC_ABILITY_PERFORM = "(.+) performs (.+).";
-	ECDC_ABILITY_CHARGE = "(.+) gains (.+) Rage from (.+)'s Charge.";
-	ECDC_ABILITY_CAST = "(.+) casts (.+).";
-
-	ECDC_LoadSkills();
-	ECDC_Activate();
-end
-
 function ECDC_ToggleStack(setPos)
 	if (setPos == "Verti") then
 		ECDC_Pos = "Verti";
-		ECDC_Tex1:ClearAllPoints(); ECDC_Tex1:SetPoint("TOP", "ECDC", "BOTTOM", 0, 3);
+		ECDC_Tex1:ClearAllPoints(); ECDC_Tex1:SetPoint("TOP", "ECDC_Frame", "BOTTOM", 0, 3);
 		ECDC_Tex2:ClearAllPoints(); ECDC_Tex2:SetPoint("TOP", "ECDC_Tex1", "BOTTOM", 0, 0);
 		ECDC_Tex3:ClearAllPoints(); ECDC_Tex3:SetPoint("TOP", "ECDC_Tex2", "BOTTOM", 0, 0);
 		ECDC_Tex4:ClearAllPoints(); ECDC_Tex4:SetPoint("TOP", "ECDC_Tex3", "BOTTOM", 0, 0);
@@ -42,7 +13,7 @@ function ECDC_ToggleStack(setPos)
 		ECDC_Tex10:ClearAllPoints(); ECDC_Tex10:SetPoint("TOP", "ECDC_Tex9", "BOTTOM", 0, 0);
 	elseif (setPos == "Hori") then
 		ECDC_Pos = "Hori";
-		ECDC_Tex1:ClearAllPoints(); ECDC_Tex1:SetPoint("LEFT", "ECDC", "RIGHT", 0, 0);
+		ECDC_Tex1:ClearAllPoints(); ECDC_Tex1:SetPoint("LEFT", "ECDC_Frame", "RIGHT", 0, 0);
 		ECDC_Tex2:ClearAllPoints(); ECDC_Tex2:SetPoint("LEFT", "ECDC_Tex1", "RIGHT", 0, 0);
 		ECDC_Tex3:ClearAllPoints(); ECDC_Tex3:SetPoint("LEFT", "ECDC_Tex2", "RIGHT", 0, 0);
 		ECDC_Tex4:ClearAllPoints(); ECDC_Tex4:SetPoint("LEFT", "ECDC_Tex3", "RIGHT", 0, 0);
@@ -56,57 +27,14 @@ function ECDC_ToggleStack(setPos)
 end
 
 function ECDC_Click()
-	if (arg1 == "LeftButton") then	
-		if (ECDC_Activated == 0) then 
-			ECDC_Activate(); 
-		else 
-			ECDC_Deactivate(); 
-		end;
-	elseif (arg1 == "RightButton") then
-		if (ECDC_Pos == "Hori") then
-			ECDC_ToggleStack("Verti");
-		elseif (ECDC_Pos == "Verti") then
-			ECDC_ToggleStack("Hori");
-		else
-			-- If its nothing.. set it to something!
-			ECDC_ToggleStack("Verti");
-		end
+	if (ECDC_Pos == "Hori") then
+		ECDC_ToggleStack("Verti");
+	elseif (ECDC_Pos == "Verti") then
+		ECDC_ToggleStack("Hori");
+	else
+		-- If its nothing.. set it to something!
+		ECDC_ToggleStack("Verti");
 	end
-end
-
-function ECDC_Activate()
-	ECDC_Activated = 1;
-	ECDC_Button:SetNormalTexture("Interface\\Buttons\\UI-MicroButton-Abilities-Up.blp");
-
-	this:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_FRIENDLYPLAYER_DAMAGE");
-	this:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_FRIENDLYPLAYER_BUFFS");
-	this:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_HOSTILEPLAYER_DAMAGE");
-	this:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_HOSTILEPLAYER_BUFFS");
-	this:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_PARTY_DAMAGE");
-	this:RegisterEvent("CHAT_MSG_SPELL_FRIENDLYPLAYER_DAMAGE");
-	this:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_PARTY_BUFFS");
-	this:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_SELF_DAMAGE");
-	this:RegisterEvent("CHAT_MSG_SPELL_FRIENDLYPLAYER_BUFF");
-	this:RegisterEvent("CHAT_MSG_SPELL_HOSTILEPLAYER_DAMAGE");
-	this:RegisterEvent("CHAT_MSG_SPELL_HOSTILEPLAYER_BUFF");
-	this:RegisterEvent("CHAT_MSG_SPELL_PARTY_DAMAGE");
-	this:RegisterEvent("CHAT_MSG_SPELL_PARTY_BUFF");
-
-	this:RegisterEvent("ADDON_LOADED");
- end
-
-function ECDC_Deactivate()
-	ECDC_Activated = 0;
-	ECDC_Button:SetNormalTexture("Interface\\Buttons\\UI-MicroButton-Abilities-Disabled.blp");
-
-	-- Someone gains something.
-	this:UnregisterEvent("CHAT_MSG_SPELL_PERIODIC_FRIENDLYPLAYER_BUFFS");
-	this:UnregisterEvent("CHAT_MSG_SPELL_PERIODIC_ENEMYPLAYER_BUFFS");
-	this:UnregisterEvent("CHAT_MSG_SPELL_PERIODIC_PARTY_BUFFS");
-
-	-- Someone's something hits/crits someone for #.
-	this:UnregisterEvent("CHAT_MSG_SPELL_FRIENDLYPLAYER_DAMAGE");
-	this:UnregisterEvent("CHAT_MSG_SPELL_ENEMYPLAYER_DAMAGE");
 end
 
 function ECDC_ToolTip(tooltipnum)
@@ -118,6 +46,39 @@ end
 
 function ECDC_OnEvent(event)
 	if event == 'ADDON_LOADED' and arg1 == 'ECDC' then
+
+		ECDC_ToolTips = {};
+		ECDC_ToolTipDetails = {};
+		ECDC_UsedSkills = {};
+		ECDC_UpdateInterval = 0.1;
+		ECDC_TimeSinceLastUpdate = 0;
+
+		ECDC_GAINS = "(.+) gains (.+).";
+		ECDC_ABILITY_HITS = "(.+)'s (.+) hits (.+) for (.+)";
+		ECDC_ABILITY_CRITS = "(.+)'s (.+) crits (.+) for (.+)";
+		ECDC_ABILITY_ABSORB = "(.+)'s (.+) is absorbed by (.+).";
+		ECDC_ABILITY_PERFORM = "(.+) performs (.+).";
+		ECDC_ABILITY_CHARGE = "(.+) gains (.+) Rage from (.+)'s Charge.";
+		ECDC_ABILITY_CAST = "(.+) casts (.+).";
+
+		ECDC_LoadSkills();
+
+		ECDC_Button:SetNormalTexture("Interface\\Buttons\\UI-MicroButton-Abilities-Up.blp");
+
+		this:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_FRIENDLYPLAYER_DAMAGE");
+		this:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_FRIENDLYPLAYER_BUFFS");
+		this:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_HOSTILEPLAYER_DAMAGE");
+		this:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_HOSTILEPLAYER_BUFFS");
+		this:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_PARTY_DAMAGE");
+		this:RegisterEvent("CHAT_MSG_SPELL_FRIENDLYPLAYER_DAMAGE");
+		this:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_PARTY_BUFFS");
+		this:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_SELF_DAMAGE");
+		this:RegisterEvent("CHAT_MSG_SPELL_FRIENDLYPLAYER_BUFF");
+		this:RegisterEvent("CHAT_MSG_SPELL_HOSTILEPLAYER_DAMAGE");
+		this:RegisterEvent("CHAT_MSG_SPELL_HOSTILEPLAYER_BUFF");
+		this:RegisterEvent("CHAT_MSG_SPELL_PARTY_DAMAGE");
+		this:RegisterEvent("CHAT_MSG_SPELL_PARTY_BUFF");
+
 		ECDC_ToggleStack(ECDC_Pos)
 		if ECDC_Locked then
 			ECDC_Button:Hide()
@@ -127,43 +88,43 @@ function ECDC_OnEvent(event)
 	-- For gains
 	for player, spell in string.gfind(arg1, ECDC_GAINS) do
 		if (ECDC_GetSkillCooldown(spell) ~= ECDC_ErrCountdown) then
-			table.insert(ECDC_UsedSkills, {player = player, skill = spell, info = ECDC_GetInfo(spell), texture = ECDC_GetTexture(spell), countdown = ECDC_GetSkillCooldown(spell), started = GetTime()});
+			table.insert(ECDC_UsedSkills, {player = player, skill = spell, info = ECDC_GetInfo(spell), texture = ECDC_GetTexture(spell), countdown = ECDC_GetSkillCooldown(spell), started = time()});
 		end
 	end
 	-- For performs
 	for player, spell in string.gfind(arg1, ECDC_ABILITY_PERFORM) do
 		if (ECDC_GetSkillCooldown(spell) ~= ECDC_ErrCountdown) then
-			table.insert(ECDC_UsedSkills, {player = player, skill = spell, info = ECDC_GetInfo(spell), texture = ECDC_GetTexture(spell), countdown = ECDC_GetSkillCooldown(spell), started = GetTime()});
+			table.insert(ECDC_UsedSkills, {player = player, skill = spell, info = ECDC_GetInfo(spell), texture = ECDC_GetTexture(spell), countdown = ECDC_GetSkillCooldown(spell), started = time()});
 		end
 	end
 	-- For hits
 	for player, spell, afflictee, damage in string.gfind(arg1, ECDC_ABILITY_HITS) do
 		if (ECDC_GetSkillCooldown(spell) ~= ECDC_ErrCountdown) then
-			table.insert(ECDC_UsedSkills, {player = player, skill = spell, info = ECDC_GetInfo(spell), texture = ECDC_GetTexture(spell), countdown = ECDC_GetSkillCooldown(spell), started = GetTime()});
+			table.insert(ECDC_UsedSkills, {player = player, skill = spell, info = ECDC_GetInfo(spell), texture = ECDC_GetTexture(spell), countdown = ECDC_GetSkillCooldown(spell), started = time()});
 		end
 	end
 	-- For crits
 	for player, spell, afflictee, damage in string.gfind(arg1, ECDC_ABILITY_CRITS) do
 		if (ECDC_GetSkillCooldown(spell) ~= ECDC_ErrCountdown) then
-			table.insert(ECDC_UsedSkills, {player = player, skill = spell, info = ECDC_GetInfo(spell), texture = ECDC_GetTexture(spell), countdown = ECDC_GetSkillCooldown(spell), started = GetTime()});
+			table.insert(ECDC_UsedSkills, {player = player, skill = spell, info = ECDC_GetInfo(spell), texture = ECDC_GetTexture(spell), countdown = ECDC_GetSkillCooldown(spell), started = time()});
 		end
 	end
 	-- For absorbs
 	for player, spell, afflictee in string.gfind(arg1, ECDC_ABILITY_ABSORB) do
 		if (ECDC_GetSkillCooldown(spell) ~= ECDC_ErrCountdown) then
-			table.insert(ECDC_UsedSkills, {player = player, skill = spell, info = ECDC_GetInfo(spell), texture = ECDC_GetTexture(spell), countdown = ECDC_GetSkillCooldown(spell), started = GetTime()});
+			table.insert(ECDC_UsedSkills, {player = player, skill = spell, info = ECDC_GetInfo(spell), texture = ECDC_GetTexture(spell), countdown = ECDC_GetSkillCooldown(spell), started = time()});
 		end
 	end
 	-- For charge (Warriors)
 	for player, rage, player in string.gfind(arg1, ECDC_ABILITY_CHARGE) do
 		if (ECDC_GetSkillCooldown("Charge") ~= ECDC_ErrCountdown) then
-			table.insert(ECDC_UsedSkills, {player = player, skill = "Charge", info = ECDC_GetInfo("Charge"), texture = ECDC_GetTexture("Charge"), countdown = ECDC_GetSkillCooldown("Charge"), started = GetTime()});
+			table.insert(ECDC_UsedSkills, {player = player, skill = "Charge", info = ECDC_GetInfo("Charge"), texture = ECDC_GetTexture("Charge"), countdown = ECDC_GetSkillCooldown("Charge"), started = time()});
 		end
 	end
 	-- For casts
 	for player, spell in string.gfind(arg1, ECDC_ABILITY_CAST) do
 		if (ECDC_GetSkillCooldown(spell) ~= ECDC_ErrCountdown) then
-			table.insert(ECDC_UsedSkills, {player = player, skill = spell, info = ECDC_GetInfo(spell), texture = ECDC_GetTexture(spell), countdown = ECDC_GetSkillCooldown(spell), started = GetTime()});
+			table.insert(ECDC_UsedSkills, {player = player, skill = spell, info = ECDC_GetInfo(spell), texture = ECDC_GetTexture(spell), countdown = ECDC_GetSkillCooldown(spell), started = time()});
 		end
 	end
 end
@@ -177,7 +138,7 @@ function ECDC_OnUpdate(elapsed)
 
 		local temp = {}
 		for k, v in ECDC_UsedSkills do
-			local timeleft = ceil(v.countdown - (GetTime() - v.started))
+			local timeleft = v.countdown - (time() - v.started)
 			--	  Only show CD for our target if there is time left on the CD      Loop through Stuff           Warrior enrage isnt a CD, Druid Enrage is!
 			if timeleft > 0 then
 				tinsert(temp, v)
@@ -243,11 +204,11 @@ function ECDC_GetSkillCooldown(skill)
 end
 
 function ECDC_OnDragStart()
-	ECDC:StartMoving()
+	ECDC_Frame:StartMoving()
 end
 
 function ECDC_OnDragStop()
-	ECDC:StopMovingOrSizing()
+	ECDC_Frame:StopMovingOrSizing()
 end
 
 function ECDC_LoadSkills()
@@ -469,105 +430,4 @@ function SlashCmdList.ECDC()
 	else
 		ECDC_Button:Show()
 	end
-end
-
-function cooldown:ADDON_LOADED()
-	if arg1 ~= 'ECDC' then
-		return
-	end
-
-	self:RegisterEvent('BAG_UPDATE_COOLDOWN')
-	self:RegisterEvent('SPELL_UPDATE_COOLDOWN')
-end
-
-function cooldown:DetectCooldowns()
-	
-	local function startCooldown(name, texture, started, duration)
-		-- for _, ignored_name in cooline_ignore_list do
-		-- 	if strupper(name) == strupper(ignored_name) then
-		-- 		return
-		-- 	end
-		-- end
-		
-		-- local end_time = started + duration
-			
-		-- for _, cooldown in pairs(cooldowns) do
-		-- 	if cooldown.end_time == end_time then
-		-- 		return
-		-- 	end
-		-- end
-
-		for i, skill in ECDC_UsedSkills do
-			if skill.player == UnitName('player') and skill.skill == name then
-				tremove(ECDC_UsedSkills, i)
-				break
-			end
-		end
-		table.insert(ECDC_UsedSkills, {player = UnitName('player'), skill = name, info = '', texture = strsub(texture, 17), countdown = duration, started = started})
-	end
-	
-    for bag=0,4 do
-        if GetBagName(bag) then
-            for slot = 1, GetContainerNumSlots(bag) do
-				local started, duration, enabled = GetContainerItemCooldown(bag, slot)
-				if enabled == 1 then
-					local name = self:LinkName(GetContainerItemLink(bag, slot))
-					if duration == 0 or duration > 3 and duration < 3601 then
-						startCooldown(
-							name,
-							GetContainerItemInfo(bag, slot),
-							started,
-							duration
-						)
-					end
-				end
-            end
-        end
-    end
-	
-	for slot=0,19 do
-		local started, duration, enabled = GetInventoryItemCooldown('player', slot)
-		if enabled == 1 then
-			local name = self:LinkName(GetInventoryItemLink('player', slot))
-			if duration == 0 or duration > 3 and duration < 3601 then
-				startCooldown(
-					name,
-					GetInventoryItemTexture('player', slot),
-					started,
-					duration
-				)
-			end
-		end
-	end
-	
-	local _, _, offset, spellCount = GetSpellTabInfo(GetNumSpellTabs())
-	local totalSpells = offset + spellCount
-	for id=1,totalSpells do
-		local started, duration, enabled = GetSpellCooldown(id, BOOKTYPE_SPELL)
-		local name = GetSpellName(id, BOOKTYPE_SPELL)
-		if duration == 0 or enabled == 1 and duration > 2.5 then
-			startCooldown(
-				name,
-				GetSpellTexture(id, BOOKTYPE_SPELL),
-				started,
-				duration
-			)
-		end
-	end
-end
-
-function cooldown:BAG_UPDATE_COOLDOWN()
-	self:DetectCooldowns()
-end
-
-function cooldown:SPELL_UPDATE_COOLDOWN()
-	self:DetectCooldowns()
-end
-
-function cooldown:UPDATE()
-end
-
-function cooldown:LinkName(link)
-    local _, _, name = strfind(link, '|Hitem:%d+:%d+:%d+:%d+|h[[]([^]]+)[]]|h')
-    return name
 end
