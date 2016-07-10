@@ -34,7 +34,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				</Anchors>
 				<Scripts>
 					<OnLoad>
-						this:RegisterForDrag("LeftButton");
+						this:RegisterForDrag("LeftButton")
 					</OnLoad>
 					<OnDragStart>
 						ECDC_OnDragStart();
@@ -42,9 +42,12 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					<OnDragStop>
 						ECDC_OnDragStop();
 					</OnDragStop>
-					<OnClick>
+					<OnMouseDown>
+						ECDC_Test();
+					</OnMouseDown>
+					<OnMouseUp>
 						ECDC_Click();
-					</OnClick>
+					</OnMouseUp>
 				</Scripts>
 			</Button>
 		</Frames>

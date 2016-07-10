@@ -27,6 +27,10 @@ function ECDC_ToggleStack(setPos)
 end
 
 function ECDC_Click()
+	if arg1 ~= 'LeftButton' then
+		return
+	end
+
 	if (ECDC_Pos == "Hori") then
 		ECDC_ToggleStack("Verti");
 	elseif (ECDC_Pos == "Verti") then
@@ -35,6 +39,20 @@ function ECDC_Click()
 		-- If its nothing.. set it to something!
 		ECDC_ToggleStack("Verti");
 	end
+end
+
+function ECDC_Test()
+	if arg1 ~= 'LeftButton' then
+		return
+	end
+	
+	for i, skill in ECDC_UsedSkills do
+		if skill.player == '_temp' then
+			tremove(ECDC_UsedSkills, i)
+			break
+		end
+	end
+	table.insert(ECDC_UsedSkills, {player = '_temp', skill = "temp", info = '', texture = "temp", countdown = 7, started = time()})
 end
 
 function ECDC_ToolTip(tooltipnum)
@@ -143,7 +161,7 @@ function ECDC_OnUpdate(elapsed)
 			if timeleft > 0 then
 				tinsert(temp, v)
 
-				if v.player == UnitName("target") and i <= 10 and not (UnitClass("target") == "Warrior" and v.skill == "Enrage") and ECDC_ToolTips[i-1] ~= v.skill then
+				if v.player == UnitName("target") or v.player == '_temp' and i <= 10 and not (UnitClass("target") == "Warrior" and v.skill == "Enrage") and ECDC_ToolTips[i-1] ~= v.skill then
 					ECDC_ToolTips[i] = v.skill;
 					ECDC_ToolTipDetails[i] = v.info;
 					if timeleft > 60 then
