@@ -1,3 +1,12 @@
+local cooldown = CreateFrame('Frame')
+cooldown:SetScript('OnUpdate', function()
+	this:UPDATE()
+end)
+cooldown:SetScript('OnEvent', function()
+	this[event](this)
+end)
+cooldown:RegisterEvent('ADDON_LOADED')
+
 function ECDC_OnLoad()
 	ECDC_ToolTips = {};
 	ECDC_ToolTipDetails = {};
@@ -113,47 +122,48 @@ function ECDC_OnEvent(event)
 		if ECDC_Locked then
 			ECDC_Button:Hide()
 		end
+		return
 	end
 	-- For gains
 	for player, spell in string.gfind(arg1, ECDC_GAINS) do
 		if (ECDC_GetSkillCooldown(spell) ~= ECDC_ErrCountdown) then
-			table.insert(ECDC_UsedSkills, {player = player, skill = spell, info = ECDC_GetInfo(spell), texture = ECDC_GetTexture(spell), countdown = ECDC_GetSkillCooldown(spell), started = time()});
+			table.insert(ECDC_UsedSkills, {player = player, skill = spell, info = ECDC_GetInfo(spell), texture = ECDC_GetTexture(spell), countdown = ECDC_GetSkillCooldown(spell), started = GetTime()});
 		end
 	end
 	-- For performs
 	for player, spell in string.gfind(arg1, ECDC_ABILITY_PERFORM) do
 		if (ECDC_GetSkillCooldown(spell) ~= ECDC_ErrCountdown) then
-			table.insert(ECDC_UsedSkills, {player = player, skill = spell, info = ECDC_GetInfo(spell), texture = ECDC_GetTexture(spell), countdown = ECDC_GetSkillCooldown(spell), started = time()});
+			table.insert(ECDC_UsedSkills, {player = player, skill = spell, info = ECDC_GetInfo(spell), texture = ECDC_GetTexture(spell), countdown = ECDC_GetSkillCooldown(spell), started = GetTime()});
 		end
 	end
 	-- For hits
 	for player, spell, afflictee, damage in string.gfind(arg1, ECDC_ABILITY_HITS) do
 		if (ECDC_GetSkillCooldown(spell) ~= ECDC_ErrCountdown) then
-			table.insert(ECDC_UsedSkills, {player = player, skill = spell, info = ECDC_GetInfo(spell), texture = ECDC_GetTexture(spell), countdown = ECDC_GetSkillCooldown(spell), started = time()});
+			table.insert(ECDC_UsedSkills, {player = player, skill = spell, info = ECDC_GetInfo(spell), texture = ECDC_GetTexture(spell), countdown = ECDC_GetSkillCooldown(spell), started = GetTime()});
 		end
 	end
 	-- For crits
 	for player, spell, afflictee, damage in string.gfind(arg1, ECDC_ABILITY_CRITS) do
 		if (ECDC_GetSkillCooldown(spell) ~= ECDC_ErrCountdown) then
-			table.insert(ECDC_UsedSkills, {player = player, skill = spell, info = ECDC_GetInfo(spell), texture = ECDC_GetTexture(spell), countdown = ECDC_GetSkillCooldown(spell), started = time()});
+			table.insert(ECDC_UsedSkills, {player = player, skill = spell, info = ECDC_GetInfo(spell), texture = ECDC_GetTexture(spell), countdown = ECDC_GetSkillCooldown(spell), started = GetTime()});
 		end
 	end
 	-- For absorbs
 	for player, spell, afflictee in string.gfind(arg1, ECDC_ABILITY_ABSORB) do
 		if (ECDC_GetSkillCooldown(spell) ~= ECDC_ErrCountdown) then
-			table.insert(ECDC_UsedSkills, {player = player, skill = spell, info = ECDC_GetInfo(spell), texture = ECDC_GetTexture(spell), countdown = ECDC_GetSkillCooldown(spell), started = time()});
+			table.insert(ECDC_UsedSkills, {player = player, skill = spell, info = ECDC_GetInfo(spell), texture = ECDC_GetTexture(spell), countdown = ECDC_GetSkillCooldown(spell), started = GetTime()});
 		end
 	end
 	-- For charge (Warriors)
 	for player, rage, player in string.gfind(arg1, ECDC_ABILITY_CHARGE) do
 		if (ECDC_GetSkillCooldown("Charge") ~= ECDC_ErrCountdown) then
-			table.insert(ECDC_UsedSkills, {player = player, skill = "Charge", info = ECDC_GetInfo("Charge"), texture = ECDC_GetTexture("Charge"), countdown = ECDC_GetSkillCooldown("Charge"), started = time()});
+			table.insert(ECDC_UsedSkills, {player = player, skill = "Charge", info = ECDC_GetInfo("Charge"), texture = ECDC_GetTexture("Charge"), countdown = ECDC_GetSkillCooldown("Charge"), started = GetTime()});
 		end
 	end
 	-- For casts
 	for player, spell in string.gfind(arg1, ECDC_ABILITY_CAST) do
 		if (ECDC_GetSkillCooldown(spell) ~= ECDC_ErrCountdown) then
-			table.insert(ECDC_UsedSkills, {player = player, skill = spell, info = ECDC_GetInfo(spell), texture = ECDC_GetTexture(spell), countdown = ECDC_GetSkillCooldown(spell), started = time()});
+			table.insert(ECDC_UsedSkills, {player = player, skill = spell, info = ECDC_GetInfo(spell), texture = ECDC_GetTexture(spell), countdown = ECDC_GetSkillCooldown(spell), started = GetTime()});
 		end
 	end
 end
@@ -164,27 +174,35 @@ function ECDC_OnUpdate(elapsed)
 		ECDC_TimeSinceLastUpdate = 0;
 		-- Spit out the infoz
 		local i = 1;
-		for k, v in pairs(ECDC_UsedSkills) do
-			local timeleft = (v.countdown - (time() - v.started));
+
+		local temp = {}
+		for k, v in ECDC_UsedSkills do
+			local timeleft = ceil(v.countdown - (GetTime() - v.started))
 			--	  Only show CD for our target if there is time left on the CD      Loop through Stuff           Warrior enrage isnt a CD, Druid Enrage is!
-			if ((v.player == UnitName("target")) and (timeleft > 0) and (timeleft ~= nil) and (i < 11) and not(UnitClass("target") == "Warrior" and v.skill == "Enrage") and (ECDC_ToolTips[(i-1)] ~= v.skill)) then
-				ECDC_ToolTips[i] = v.skill;
-				ECDC_ToolTipDetails[i] = v.info;
-				if (timeleft > 60) then
-					timeleft = floor((timeleft/60)*10)/10;
-					getglobal("ECDC_CD"..i):SetTextColor(0, 1, 0);
-				else
-					getglobal("ECDC_CD"..i):SetTextColor(1, 1, 0);
+			if timeleft > 0 then
+				tinsert(temp, v)
+
+				if v.player == UnitName("target") and i <= 10 and not (UnitClass("target") == "Warrior" and v.skill == "Enrage") and ECDC_ToolTips[i-1] ~= v.skill then
+					ECDC_ToolTips[i] = v.skill;
+					ECDC_ToolTipDetails[i] = v.info;
+					if timeleft > 60 then
+						timeleft = floor((timeleft/60)*10)/10;
+						getglobal("ECDC_CD"..i):SetTextColor(0, 1, 0);
+					else
+						getglobal("ECDC_CD"..i):SetTextColor(1, 1, 0);
+					end
+					getglobal("ECDC_CD"..i):SetText(timeleft);
+					getglobal("ECDC_Tex"..i):SetTexture([[Interface\Icons\]]..v.texture);
+					getglobal("ECDC_Frame"..i):Show();
+					getglobal("ECDC_CD"..i):Show();
+					getglobal("ECDC_Tex"..i):Show();
+					i = i + 1;
 				end
-				getglobal("ECDC_CD"..i):SetText(timeleft);
-				getglobal("ECDC_Tex"..i):SetTexture("Interface\\Icons\\"..v.texture);
-				getglobal("ECDC_Frame"..i):Show();
-				getglobal("ECDC_CD"..i):Show();
-				getglobal("ECDC_Tex"..i):Show();
-				i = i + 1;
 			end
 		end
-		while (i < 11) do
+		ECDC_UsedSkills = temp
+
+		while i <= 10 do
 			getglobal("ECDC_Frame"..i):Hide();
 			getglobal("ECDC_CD"..i):Hide();
 			getglobal("ECDC_Tex"..i):Hide();
@@ -451,4 +469,105 @@ function SlashCmdList.ECDC()
 	else
 		ECDC_Button:Show()
 	end
+end
+
+function cooldown:ADDON_LOADED()
+	if arg1 ~= 'ECDC' then
+		return
+	end
+
+	self:RegisterEvent('BAG_UPDATE_COOLDOWN')
+	self:RegisterEvent('SPELL_UPDATE_COOLDOWN')
+end
+
+function cooldown:DetectCooldowns()
+	
+	local function startCooldown(name, texture, started, duration)
+		-- for _, ignored_name in cooline_ignore_list do
+		-- 	if strupper(name) == strupper(ignored_name) then
+		-- 		return
+		-- 	end
+		-- end
+		
+		-- local end_time = started + duration
+			
+		-- for _, cooldown in pairs(cooldowns) do
+		-- 	if cooldown.end_time == end_time then
+		-- 		return
+		-- 	end
+		-- end
+
+		for i, skill in ECDC_UsedSkills do
+			if skill.player == UnitName('player') and skill.skill == name then
+				tremove(ECDC_UsedSkills, i)
+				break
+			end
+		end
+		table.insert(ECDC_UsedSkills, {player = UnitName('player'), skill = name, info = '', texture = strsub(texture, 17), countdown = duration, started = started})
+	end
+	
+    for bag=0,4 do
+        if GetBagName(bag) then
+            for slot = 1, GetContainerNumSlots(bag) do
+				local started, duration, enabled = GetContainerItemCooldown(bag, slot)
+				if enabled == 1 then
+					local name = self:LinkName(GetContainerItemLink(bag, slot))
+					if duration == 0 or duration > 3 and duration < 3601 then
+						startCooldown(
+							name,
+							GetContainerItemInfo(bag, slot),
+							started,
+							duration
+						)
+					end
+				end
+            end
+        end
+    end
+	
+	for slot=0,19 do
+		local started, duration, enabled = GetInventoryItemCooldown('player', slot)
+		if enabled == 1 then
+			local name = self:LinkName(GetInventoryItemLink('player', slot))
+			if duration == 0 or duration > 3 and duration < 3601 then
+				startCooldown(
+					name,
+					GetInventoryItemTexture('player', slot),
+					started,
+					duration
+				)
+			end
+		end
+	end
+	
+	local _, _, offset, spellCount = GetSpellTabInfo(GetNumSpellTabs())
+	local totalSpells = offset + spellCount
+	for id=1,totalSpells do
+		local started, duration, enabled = GetSpellCooldown(id, BOOKTYPE_SPELL)
+		local name = GetSpellName(id, BOOKTYPE_SPELL)
+		if duration == 0 or enabled == 1 and duration > 2.5 then
+			startCooldown(
+				name,
+				GetSpellTexture(id, BOOKTYPE_SPELL),
+				started,
+				duration
+			)
+		end
+	end
+end
+
+function cooldown:BAG_UPDATE_COOLDOWN()
+	self:DetectCooldowns()
+end
+
+function cooldown:SPELL_UPDATE_COOLDOWN()
+	self:DetectCooldowns()
+end
+
+function cooldown:UPDATE()
+end
+
+function cooldown:LinkName(link)
+    local _, _, name = strfind(link, '|Hitem:%d+:%d+:%d+:%d+|h[[]([^]]+)[]]|h')
+    return name
 end
