@@ -175,7 +175,7 @@ function ECDC_OnUpdate(elapsed)
 			local i = 1
 
 			local temp = {}
-			sort(ECDC_UsedSkills, function(a, b) local ta, tb = a.countdown - (GetTime() - a.started), b.countdown - (GetTime() - b.started) return tb < ta or tb == ta and a.skill < b.skill end)
+			sort(ECDC_UsedSkills, function(a, b) local ta, tb = a.countdown - (GetTime() - a.started), b.countdown - (GetTime() - b.started) return ta < tb or tb == ta and a.skill < b.skill end)
 			for k, v in ECDC_UsedSkills do
 				local timeleft = v.countdown - (time() - v.started)
 				--	  Only show CD for our target if there is time left on the CD      Loop through Stuff           Warrior enrage isnt a CD, Druid Enrage is!
