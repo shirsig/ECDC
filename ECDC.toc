@@ -4,5 +4,5 @@
 ## Notes: Monitors everyone's cooldowns.
 ## Author: Daggith/Daggie [Korgath]
 ## URL: http://www.reasonguild.com
-## SavedVariables: ECDC_Pos, ECDC_Locked
+## SavedVariables: ECDC_Orientation, ECDC_Locked
 ECDC.xml
