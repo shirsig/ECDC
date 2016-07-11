@@ -42,12 +42,9 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					<OnDragStop>
 						ECDC_OnDragStop();
 					</OnDragStop>
-					<OnMouseDown>
-						ECDC_Test();
-					</OnMouseDown>
-					<OnMouseUp>
+					<OnClick>
 						ECDC_Click();
-					</OnMouseUp>
+					</OnClick>
 				</Scripts>
 			</Button>
 		</Frames>

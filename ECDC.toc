@@ -1,4 +1,4 @@
-## Interface: 11100
+## Interface: 11200
 ## Title: Enemy Cooldown Count
 ## Version: 1.1
 ## Notes: Monitors everyone's cooldowns.

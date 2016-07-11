@@ -1,3 +1,20 @@
+local ECDC = {}
+
+function ECDC:Lock()
+	ECDC_Button:Hide()
+	for i=1,10 do
+		getglobal("ECDC_Tex"..i):Hide()
+	end
+end
+
+function ECDC:Unlock()
+	ECDC_Button:Show()
+	for i=1,10 do
+		getglobal("ECDC_Tex"..i):SetTexture([[Interface\Icons\temp]])
+		getglobal("ECDC_Tex"..i):Show()
+	end
+end
+
 function ECDC_ToggleStack(setPos)
 	if (setPos == "Verti") then
 		ECDC_Pos = "Verti";
@@ -27,10 +44,6 @@ function ECDC_ToggleStack(setPos)
 end
 
 function ECDC_Click()
-	if arg1 ~= 'LeftButton' then
-		return
-	end
-
 	if (ECDC_Pos == "Hori") then
 		ECDC_ToggleStack("Verti");
 	elseif (ECDC_Pos == "Verti") then
@@ -38,25 +51,6 @@ function ECDC_Click()
 	else
 		-- If its nothing.. set it to something!
 		ECDC_ToggleStack("Verti");
-	end
-end
-
-function ECDC_Test()
-	if arg1 ~= 'LeftButton' then
-		return
-	end
-	
-	local temp = {}
-	for _, skill in ECDC_UsedSkills do
-		if skill.player ~= '_temp' then
-			tinsert(temp, skill)
-			break
-		end
-	end
-	ECDC_UsedSkills = temp
-
-	for i=1,10 do
-		table.insert(ECDC_UsedSkills, {player = '_temp', skill = "test"..i, info = '', texture = "temp", countdown = 7, started = time()})
 	end
 end
 
@@ -104,7 +98,7 @@ function ECDC_OnEvent(event)
 
 		ECDC_ToggleStack(ECDC_Pos)
 		if ECDC_Locked then
-			ECDC_Button:Hide()
+			ECDC:Lock()
 		end
 		return
 	end
@@ -157,40 +151,43 @@ function ECDC_OnUpdate(elapsed)
 	if (ECDC_TimeSinceLastUpdate > ECDC_UpdateInterval) then
 		ECDC_TimeSinceLastUpdate = 0;
 		-- Spit out the infoz
-		local i = 1;
 
-		local temp = {}
-		for k, v in ECDC_UsedSkills do
-			local timeleft = v.countdown - (time() - v.started)
-			--	  Only show CD for our target if there is time left on the CD      Loop through Stuff           Warrior enrage isnt a CD, Druid Enrage is!
-			if timeleft > 0 then
-				tinsert(temp, v)
+		if ECDC_Locked then
+			local i = 1
 
-				if v.player == UnitName("target") or v.player == '_temp' and i <= 10 and not (UnitClass("target") == "Warrior" and v.skill == "Enrage") and ECDC_ToolTips[i-1] ~= v.skill then
-					ECDC_ToolTips[i] = v.skill;
-					ECDC_ToolTipDetails[i] = v.info;
-					if timeleft > 60 then
-						timeleft = floor((timeleft/60)*10)/10;
-						getglobal("ECDC_CD"..i):SetTextColor(0, 1, 0);
-					else
-						getglobal("ECDC_CD"..i):SetTextColor(1, 1, 0);
+			local temp = {}
+			for k, v in ECDC_UsedSkills do
+				local timeleft = v.countdown - (time() - v.started)
+				--	  Only show CD for our target if there is time left on the CD      Loop through Stuff           Warrior enrage isnt a CD, Druid Enrage is!
+				if timeleft > 0 then
+					tinsert(temp, v)
+
+					if v.player == UnitName("target") or v.player == '_temp' and i <= 10 and not (UnitClass("target") == "Warrior" and v.skill == "Enrage") and ECDC_ToolTips[i-1] ~= v.skill then
+						ECDC_ToolTips[i] = v.skill;
+						ECDC_ToolTipDetails[i] = v.info;
+						if timeleft > 60 then
+							timeleft = floor((timeleft/60)*10)/10;
+							getglobal("ECDC_CD"..i):SetTextColor(0, 1, 0);
+						else
+							getglobal("ECDC_CD"..i):SetTextColor(1, 1, 0);
+						end
+						getglobal("ECDC_CD"..i):SetText(timeleft);
+						getglobal("ECDC_Tex"..i):SetTexture([[Interface\Icons\]]..v.texture);
+						getglobal("ECDC_Frame"..i):Show();
+						getglobal("ECDC_CD"..i):Show();
+						getglobal("ECDC_Tex"..i):Show();
+						i = i + 1;
 					end
-					getglobal("ECDC_CD"..i):SetText(timeleft);
-					getglobal("ECDC_Tex"..i):SetTexture([[Interface\Icons\]]..v.texture);
-					getglobal("ECDC_Frame"..i):Show();
-					getglobal("ECDC_CD"..i):Show();
-					getglobal("ECDC_Tex"..i):Show();
-					i = i + 1;
 				end
 			end
-		end
-		ECDC_UsedSkills = temp
+			ECDC_UsedSkills = temp
 
-		while i <= 10 do
-			getglobal("ECDC_Frame"..i):Hide();
-			getglobal("ECDC_CD"..i):Hide();
-			getglobal("ECDC_Tex"..i):Hide();
-			i = i + 1;
+			while i <= 10 do
+				getglobal("ECDC_Frame"..i):Hide();
+				getglobal("ECDC_CD"..i):Hide();
+				getglobal("ECDC_Tex"..i):Hide();
+				i = i + 1;
+			end
 		end
 	end
 end
@@ -449,8 +446,8 @@ SLASH_ECDC1 = '/ecdc'
 function SlashCmdList.ECDC()
 	ECDC_Locked = not ECDC_Locked
 	if ECDC_Locked then
-		ECDC_Button:Hide()
+		ECDC:Lock()
 	else
-		ECDC_Button:Show()
+		ECDC:Unlock()
 	end
 end
