@@ -1,5 +1,8 @@
 local ECDC = {}
 
+ECDC_Orientation = 1
+local R, D, L, U = 1, 2, 3, 4
+
 function ECDC:Lock()
 	ECDC_Button:Hide()
 	for i=1,10 do
@@ -15,43 +18,57 @@ function ECDC:Unlock()
 	end
 end
 
-function ECDC_ToggleStack(setPos)
-	if (setPos == "Verti") then
-		ECDC_Pos = "Verti";
-		ECDC_Tex1:ClearAllPoints(); ECDC_Tex1:SetPoint("TOP", "ECDC_Frame", "BOTTOM", 0, 3);
-		ECDC_Tex2:ClearAllPoints(); ECDC_Tex2:SetPoint("TOP", "ECDC_Tex1", "BOTTOM", 0, 0);
-		ECDC_Tex3:ClearAllPoints(); ECDC_Tex3:SetPoint("TOP", "ECDC_Tex2", "BOTTOM", 0, 0);
-		ECDC_Tex4:ClearAllPoints(); ECDC_Tex4:SetPoint("TOP", "ECDC_Tex3", "BOTTOM", 0, 0);
-		ECDC_Tex5:ClearAllPoints(); ECDC_Tex5:SetPoint("TOP", "ECDC_Tex4", "BOTTOM", 0, 0);
-		ECDC_Tex6:ClearAllPoints(); ECDC_Tex6:SetPoint("TOP", "ECDC_Tex5", "BOTTOM", 0, 0);
-		ECDC_Tex7:ClearAllPoints(); ECDC_Tex7:SetPoint("TOP", "ECDC_Tex6", "BOTTOM", 0, 0);
-		ECDC_Tex8:ClearAllPoints(); ECDC_Tex8:SetPoint("TOP", "ECDC_Tex7", "BOTTOM", 0, 0);
-		ECDC_Tex9:ClearAllPoints(); ECDC_Tex9:SetPoint("TOP", "ECDC_Tex8", "BOTTOM", 0, 0);
-		ECDC_Tex10:ClearAllPoints(); ECDC_Tex10:SetPoint("TOP", "ECDC_Tex9", "BOTTOM", 0, 0);
-	elseif (setPos == "Hori") then
-		ECDC_Pos = "Hori";
-		ECDC_Tex1:ClearAllPoints(); ECDC_Tex1:SetPoint("LEFT", "ECDC_Frame", "RIGHT", 0, 0);
-		ECDC_Tex2:ClearAllPoints(); ECDC_Tex2:SetPoint("LEFT", "ECDC_Tex1", "RIGHT", 0, 0);
-		ECDC_Tex3:ClearAllPoints(); ECDC_Tex3:SetPoint("LEFT", "ECDC_Tex2", "RIGHT", 0, 0);
-		ECDC_Tex4:ClearAllPoints(); ECDC_Tex4:SetPoint("LEFT", "ECDC_Tex3", "RIGHT", 0, 0);
-		ECDC_Tex5:ClearAllPoints(); ECDC_Tex5:SetPoint("LEFT", "ECDC_Tex4", "RIGHT", 0, 0);
-		ECDC_Tex6:ClearAllPoints(); ECDC_Tex6:SetPoint("LEFT", "ECDC_Tex5", "RIGHT", 0, 0);
-		ECDC_Tex7:ClearAllPoints(); ECDC_Tex7:SetPoint("LEFT", "ECDC_Tex6", "RIGHT", 0, 0);
-		ECDC_Tex8:ClearAllPoints(); ECDC_Tex8:SetPoint("LEFT", "ECDC_Tex7", "RIGHT", 0, 0);
-		ECDC_Tex9:ClearAllPoints(); ECDC_Tex9:SetPoint("LEFT", "ECDC_Tex8", "RIGHT", 0, 0);
-		ECDC_Tex10:ClearAllPoints(); ECDC_Tex10:SetPoint("LEFT", "ECDC_Tex9", "RIGHT", 0, 0);
+function ECDC_ToggleStack()
+	if ECDC_Orientation == U then
+		ECDC_Tex1:ClearAllPoints() ECDC_Tex1:SetPoint('BOTTOM', 'ECDC_Frame', 'TOP', 0, -3)
+		ECDC_Tex2:ClearAllPoints() ECDC_Tex2:SetPoint('BOTTOM', 'ECDC_Tex1', 'TOP', 0, 0)
+		ECDC_Tex3:ClearAllPoints() ECDC_Tex3:SetPoint('BOTTOM', 'ECDC_Tex2', 'TOP', 0, 0)
+		ECDC_Tex4:ClearAllPoints() ECDC_Tex4:SetPoint('BOTTOM', 'ECDC_Tex3', 'TOP', 0, 0)
+		ECDC_Tex5:ClearAllPoints() ECDC_Tex5:SetPoint('BOTTOM', 'ECDC_Tex4', 'TOP', 0, 0)
+		ECDC_Tex6:ClearAllPoints() ECDC_Tex6:SetPoint('BOTTOM', 'ECDC_Tex5', 'TOP', 0, 0)
+		ECDC_Tex7:ClearAllPoints() ECDC_Tex7:SetPoint('BOTTOM', 'ECDC_Tex6', 'TOP', 0, 0)
+		ECDC_Tex8:ClearAllPoints() ECDC_Tex8:SetPoint('BOTTOM', 'ECDC_Tex7', 'TOP', 0, 0)
+		ECDC_Tex9:ClearAllPoints() ECDC_Tex9:SetPoint('BOTTOM', 'ECDC_Tex8', 'TOP', 0, 0)
+		ECDC_Tex10:ClearAllPoints() ECDC_Tex10:SetPoint('BOTTOM', 'ECDC_Tex9', 'TOP', 0, 0)
+	elseif ECDC_Orientation == D then
+		ECDC_Tex1:ClearAllPoints() ECDC_Tex1:SetPoint('TOP', 'ECDC_Frame', 'BOTTOM', 0, 3)
+		ECDC_Tex2:ClearAllPoints() ECDC_Tex2:SetPoint('TOP', 'ECDC_Tex1', 'BOTTOM', 0, 0)
+		ECDC_Tex3:ClearAllPoints() ECDC_Tex3:SetPoint('TOP', 'ECDC_Tex2', 'BOTTOM', 0, 0)
+		ECDC_Tex4:ClearAllPoints() ECDC_Tex4:SetPoint('TOP', 'ECDC_Tex3', 'BOTTOM', 0, 0)
+		ECDC_Tex5:ClearAllPoints() ECDC_Tex5:SetPoint('TOP', 'ECDC_Tex4', 'BOTTOM', 0, 0)
+		ECDC_Tex6:ClearAllPoints() ECDC_Tex6:SetPoint('TOP', 'ECDC_Tex5', 'BOTTOM', 0, 0)
+		ECDC_Tex7:ClearAllPoints() ECDC_Tex7:SetPoint('TOP', 'ECDC_Tex6', 'BOTTOM', 0, 0)
+		ECDC_Tex8:ClearAllPoints() ECDC_Tex8:SetPoint('TOP', 'ECDC_Tex7', 'BOTTOM', 0, 0)
+		ECDC_Tex9:ClearAllPoints() ECDC_Tex9:SetPoint('TOP', 'ECDC_Tex8', 'BOTTOM', 0, 0)
+		ECDC_Tex10:ClearAllPoints() ECDC_Tex10:SetPoint('TOP', 'ECDC_Tex9', 'BOTTOM', 0, 0)
+	elseif ECDC_Orientation == L then
+		ECDC_Tex1:ClearAllPoints() ECDC_Tex1:SetPoint('RIGHT', 'ECDC_Frame', 'LEFT', 0, 0)
+		ECDC_Tex2:ClearAllPoints() ECDC_Tex2:SetPoint('RIGHT', 'ECDC_Tex1', 'LEFT', 0, 0)
+		ECDC_Tex3:ClearAllPoints() ECDC_Tex3:SetPoint('RIGHT', 'ECDC_Tex2', 'LEFT', 0, 0)
+		ECDC_Tex4:ClearAllPoints() ECDC_Tex4:SetPoint('RIGHT', 'ECDC_Tex3', 'LEFT', 0, 0)
+		ECDC_Tex5:ClearAllPoints() ECDC_Tex5:SetPoint('RIGHT', 'ECDC_Tex4', 'LEFT', 0, 0)
+		ECDC_Tex6:ClearAllPoints() ECDC_Tex6:SetPoint('RIGHT', 'ECDC_Tex5', 'LEFT', 0, 0)
+		ECDC_Tex7:ClearAllPoints() ECDC_Tex7:SetPoint('RIGHT', 'ECDC_Tex6', 'LEFT', 0, 0)
+		ECDC_Tex8:ClearAllPoints() ECDC_Tex8:SetPoint('RIGHT', 'ECDC_Tex7', 'LEFT', 0, 0)
+		ECDC_Tex9:ClearAllPoints() ECDC_Tex9:SetPoint('RIGHT', 'ECDC_Tex8', 'LEFT', 0, 0)
+		ECDC_Tex10:ClearAllPoints() ECDC_Tex10:SetPoint('RIGHT', 'ECDC_Tex9', 'LEFT', 0, 0)
+	elseif ECDC_Orientation == R then
+		ECDC_Tex1:ClearAllPoints() ECDC_Tex1:SetPoint('LEFT', 'ECDC_Frame', 'RIGHT', 0, 0)
+		ECDC_Tex2:ClearAllPoints() ECDC_Tex2:SetPoint('LEFT', 'ECDC_Tex1', 'RIGHT', 0, 0)
+		ECDC_Tex3:ClearAllPoints() ECDC_Tex3:SetPoint('LEFT', 'ECDC_Tex2', 'RIGHT', 0, 0)
+		ECDC_Tex4:ClearAllPoints() ECDC_Tex4:SetPoint('LEFT', 'ECDC_Tex3', 'RIGHT', 0, 0)
+		ECDC_Tex5:ClearAllPoints() ECDC_Tex5:SetPoint('LEFT', 'ECDC_Tex4', 'RIGHT', 0, 0)
+		ECDC_Tex6:ClearAllPoints() ECDC_Tex6:SetPoint('LEFT', 'ECDC_Tex5', 'RIGHT', 0, 0)
+		ECDC_Tex7:ClearAllPoints() ECDC_Tex7:SetPoint('LEFT', 'ECDC_Tex6', 'RIGHT', 0, 0)
+		ECDC_Tex8:ClearAllPoints() ECDC_Tex8:SetPoint('LEFT', 'ECDC_Tex7', 'RIGHT', 0, 0)
+		ECDC_Tex9:ClearAllPoints() ECDC_Tex9:SetPoint('LEFT', 'ECDC_Tex8', 'RIGHT', 0, 0)
+		ECDC_Tex10:ClearAllPoints() ECDC_Tex10:SetPoint('LEFT', 'ECDC_Tex9', 'RIGHT', 0, 0)
 	end
 end
 
 function ECDC_Click()
-	if (ECDC_Pos == "Hori") then
-		ECDC_ToggleStack("Verti");
-	elseif (ECDC_Pos == "Verti") then
-		ECDC_ToggleStack("Hori");
-	else
-		-- If its nothing.. set it to something!
-		ECDC_ToggleStack("Verti");
-	end
+	ECDC_Orientation = mod(ECDC_Orientation, 4) + 1
+	ECDC_ToggleStack()
 end
 
 function ECDC_ToolTip(tooltipnum)
@@ -96,9 +113,11 @@ function ECDC_OnEvent(event)
 		this:RegisterEvent("CHAT_MSG_SPELL_PARTY_DAMAGE");
 		this:RegisterEvent("CHAT_MSG_SPELL_PARTY_BUFF");
 
-		ECDC_ToggleStack(ECDC_Pos)
+		ECDC_ToggleStack()
 		if ECDC_Locked then
 			ECDC:Lock()
+		else
+			ECDC:Unlock()
 		end
 		return
 	end
