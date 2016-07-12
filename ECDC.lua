@@ -124,43 +124,43 @@ function ECDC_OnEvent(event)
 	-- For gains
 	for player, spell in string.gfind(arg1, ECDC_GAINS) do
 		if (ECDC_GetSkillCooldown(spell) ~= ECDC_ErrCountdown) then
-			table.insert(ECDC_UsedSkills, {player = player, skill = spell, info = ECDC_GetInfo(spell), texture = ECDC_GetTexture(spell), countdown = ECDC_GetSkillCooldown(spell), started = time()});
+			table.insert(ECDC_UsedSkills, {player = player, skill = spell, info = ECDC_GetInfo(spell), texture = ECDC_GetTexture(spell), countdown = ECDC_GetSkillCooldown(spell), started = GetTime()});
 		end
 	end
 	-- For performs
 	for player, spell in string.gfind(arg1, ECDC_ABILITY_PERFORM) do
 		if (ECDC_GetSkillCooldown(spell) ~= ECDC_ErrCountdown) then
-			table.insert(ECDC_UsedSkills, {player = player, skill = spell, info = ECDC_GetInfo(spell), texture = ECDC_GetTexture(spell), countdown = ECDC_GetSkillCooldown(spell), started = time()});
+			table.insert(ECDC_UsedSkills, {player = player, skill = spell, info = ECDC_GetInfo(spell), texture = ECDC_GetTexture(spell), countdown = ECDC_GetSkillCooldown(spell), started = GetTime()});
 		end
 	end
 	-- For hits
 	for player, spell, afflictee, damage in string.gfind(arg1, ECDC_ABILITY_HITS) do
 		if (ECDC_GetSkillCooldown(spell) ~= ECDC_ErrCountdown) then
-			table.insert(ECDC_UsedSkills, {player = player, skill = spell, info = ECDC_GetInfo(spell), texture = ECDC_GetTexture(spell), countdown = ECDC_GetSkillCooldown(spell), started = time()});
+			table.insert(ECDC_UsedSkills, {player = player, skill = spell, info = ECDC_GetInfo(spell), texture = ECDC_GetTexture(spell), countdown = ECDC_GetSkillCooldown(spell), started = GetTime()});
 		end
 	end
 	-- For crits
 	for player, spell, afflictee, damage in string.gfind(arg1, ECDC_ABILITY_CRITS) do
 		if (ECDC_GetSkillCooldown(spell) ~= ECDC_ErrCountdown) then
-			table.insert(ECDC_UsedSkills, {player = player, skill = spell, info = ECDC_GetInfo(spell), texture = ECDC_GetTexture(spell), countdown = ECDC_GetSkillCooldown(spell), started = time()});
+			table.insert(ECDC_UsedSkills, {player = player, skill = spell, info = ECDC_GetInfo(spell), texture = ECDC_GetTexture(spell), countdown = ECDC_GetSkillCooldown(spell), started = GetTime()});
 		end
 	end
 	-- For absorbs
 	for player, spell, afflictee in string.gfind(arg1, ECDC_ABILITY_ABSORB) do
 		if (ECDC_GetSkillCooldown(spell) ~= ECDC_ErrCountdown) then
-			table.insert(ECDC_UsedSkills, {player = player, skill = spell, info = ECDC_GetInfo(spell), texture = ECDC_GetTexture(spell), countdown = ECDC_GetSkillCooldown(spell), started = time()});
+			table.insert(ECDC_UsedSkills, {player = player, skill = spell, info = ECDC_GetInfo(spell), texture = ECDC_GetTexture(spell), countdown = ECDC_GetSkillCooldown(spell), started = GetTime()});
 		end
 	end
 	-- For charge (Warriors)
 	for player, rage, player in string.gfind(arg1, ECDC_ABILITY_CHARGE) do
 		if (ECDC_GetSkillCooldown("Charge") ~= ECDC_ErrCountdown) then
-			table.insert(ECDC_UsedSkills, {player = player, skill = "Charge", info = ECDC_GetInfo("Charge"), texture = ECDC_GetTexture("Charge"), countdown = ECDC_GetSkillCooldown("Charge"), started = time()});
+			table.insert(ECDC_UsedSkills, {player = player, skill = "Charge", info = ECDC_GetInfo("Charge"), texture = ECDC_GetTexture("Charge"), countdown = ECDC_GetSkillCooldown("Charge"), started = GetTime()});
 		end
 	end
 	-- For casts
 	for player, spell in string.gfind(arg1, ECDC_ABILITY_CAST) do
 		if (ECDC_GetSkillCooldown(spell) ~= ECDC_ErrCountdown) then
-			table.insert(ECDC_UsedSkills, {player = player, skill = spell, info = ECDC_GetInfo(spell), texture = ECDC_GetTexture(spell), countdown = ECDC_GetSkillCooldown(spell), started = time()});
+			table.insert(ECDC_UsedSkills, {player = player, skill = spell, info = ECDC_GetInfo(spell), texture = ECDC_GetTexture(spell), countdown = ECDC_GetSkillCooldown(spell), started = GetTime()});
 		end
 	end
 end
@@ -177,7 +177,7 @@ function ECDC_OnUpdate(elapsed)
 			local temp = {}
 			sort(ECDC_UsedSkills, function(a, b) local ta, tb = a.countdown - (GetTime() - a.started), b.countdown - (GetTime() - b.started) return ta < tb or tb == ta and a.skill < b.skill end)
 			for k, v in ECDC_UsedSkills do
-				local timeleft = v.countdown - (time() - v.started)
+				local timeleft = ceil(v.countdown - (GetTime() - v.started))
 				--	  Only show CD for our target if there is time left on the CD      Loop through Stuff           Warrior enrage isnt a CD, Druid Enrage is!
 				if timeleft > 0 then
 					tinsert(temp, v)
