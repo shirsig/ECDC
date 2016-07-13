@@ -98,8 +98,6 @@ function ECDC_OnEvent(event)
 		ECDC_ToolTips = {}
 		ECDC_ToolTipDetails = {}
 		ECDC_UsedSkills = {}
-		ECDC_UpdateInterval = 0.1
-		ECDC_TimeSinceLastUpdate = 0
 
 		ECDC_GAINS = "(.+) gains (.+)."
 		ECDC_ABILITY_HITS = "(.+)'s (.+) hits (.+) for (.+)"
