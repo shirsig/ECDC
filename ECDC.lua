@@ -1,6 +1,8 @@
 local ECDC = {}
 
+ECDC_Position = {0, 0}
 ECDC_Orientation = 1
+
 local R, D, L, U = 1, 2, 3, 4
 
 function ECDC:Lock()
@@ -90,6 +92,8 @@ end
 
 function ECDC_OnEvent(event)
 	if event == 'ADDON_LOADED' and arg1 == 'ECDC' then
+
+		ECDC_Frame:SetPoint('CENTER', unpack(ECDC_Position))
 
 		ECDC_ToolTips = {}
 		ECDC_ToolTipDetails = {}
@@ -261,6 +265,9 @@ end
 
 function ECDC_OnDragStop()
 	ECDC_Frame:StopMovingOrSizing()
+	local x, y = ECDC_Frame:GetCenter()
+	local ux, uy = UIParent:GetCenter()
+	ECDC_Position = {floor(x - ux + 0.5), floor(y - uy + .7)}
 end
 
 function ECDC_LoadSkills()

@@ -1,7 +1,7 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 	<Script file="ECDC.lua"/>
-	<Frame name="ECDC_Frame" frameStrata="LOW" toplevel="true" movable="true" parent="UIParent">
+	<Frame frameStrata="LOW" toplevel="true" movable="true" parent="UIParent">
 		<Size>
 			<AbsDimension x="32" y="32"/>
 		</Size>
@@ -12,6 +12,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 		<Scripts>
 			<OnLoad>
 				this:RegisterEvent("ADDON_LOADED")
+				ECDC_Frame = this
 			</OnLoad>
 			<OnEvent>
 				ECDC_OnEvent(event)
@@ -26,7 +27,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					<AbsDimension x="32" y="40"/>
 				</Size>
 				<Anchors>
-					<Anchor point="CENTER" relativeTo="ECDC_Frame" relativePoint="CENTER">
+					<Anchor point="CENTER" relativePoint="CENTER">
 						<Offset>
 							<AbsDimension x="0" y="8"/>
 						</Offset>
@@ -35,7 +36,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				<Scripts>
 					<OnLoad>
 						this:RegisterForDrag("LeftButton")
-						this:RegisterForDrag("LeftButton")
+						this:RegisterForClicks("LeftButtonUp", "RightButtonUp")
 					</OnLoad>
 					<OnDragStart>
 						ECDC_OnDragStart()
@@ -66,7 +67,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 						<AbsDimension x="32" y="32"></AbsDimension>
 					</Size>
 					<Anchors>
-						<Anchor point="LEFT" relativeTo="ECDC_Frame" relativePoint="RIGHT">
+						<Anchor point="LEFT" relativePoint="RIGHT">
 							<Offset>
 								<AbsDimension x="0" y="0"/>
 							</Offset>
