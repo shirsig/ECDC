@@ -6,15 +6,19 @@ local R, D, L, U = 1, 2, 3, 4
 function ECDC:Lock()
 	ECDC_Button:Hide()
 	for i=1,10 do
-		getglobal("ECDC_Tex"..i):Hide()
+		getglobal('ECDC_Tex'..i):Hide()
 	end
 end
 
 function ECDC:Unlock()
 	ECDC_Button:Show()
 	for i=1,10 do
-		getglobal("ECDC_Tex"..i):SetTexture([[Interface\Icons\temp]])
-		getglobal("ECDC_Tex"..i):Show()
+		ECDC_ToolTips[i] = 'test'..i
+		ECDC_ToolTipDetails[i] = 'test'..i
+		getglobal('ECDC_Tex'..i):SetTexture([[Interface\Icons\temp]])
+		getglobal('ECDC_Frame'..i):Show()
+		getglobal('ECDC_Tex'..i):Show()
+		getglobal('ECDC_CD'..i):Hide()
 	end
 end
 
@@ -72,46 +76,46 @@ function ECDC_Click()
 end
 
 function ECDC_ToolTip(tooltipnum)
-	GameTooltip:SetOwner(this, "ANCHOR_RIGHT");
-	GameTooltip:AddLine(ECDC_ToolTips[tooltipnum]);
-	GameTooltip:AddLine(ECDC_ToolTipDetails[tooltipnum], .8, .8, .8, 1);
-	GameTooltip:Show();
+	GameTooltip:SetOwner(this, 'ANCHOR_RIGHT')
+	GameTooltip:AddLine(ECDC_ToolTips[tooltipnum])
+	GameTooltip:AddLine(ECDC_ToolTipDetails[tooltipnum], .8, .8, .8, 1)
+	GameTooltip:Show()
 end
 
 function ECDC_OnEvent(event)
 	if event == 'ADDON_LOADED' and arg1 == 'ECDC' then
 
-		ECDC_ToolTips = {};
-		ECDC_ToolTipDetails = {};
-		ECDC_UsedSkills = {};
-		ECDC_UpdateInterval = 0.1;
-		ECDC_TimeSinceLastUpdate = 0;
+		ECDC_ToolTips = {}
+		ECDC_ToolTipDetails = {}
+		ECDC_UsedSkills = {}
+		ECDC_UpdateInterval = 0.1
+		ECDC_TimeSinceLastUpdate = 0
 
-		ECDC_GAINS = "(.+) gains (.+).";
-		ECDC_ABILITY_HITS = "(.+)'s (.+) hits (.+) for (.+)";
-		ECDC_ABILITY_CRITS = "(.+)'s (.+) crits (.+) for (.+)";
-		ECDC_ABILITY_ABSORB = "(.+)'s (.+) is absorbed by (.+).";
-		ECDC_ABILITY_PERFORM = "(.+) performs (.+).";
-		ECDC_ABILITY_CHARGE = "(.+) gains (.+) Rage from (.+)'s Charge.";
-		ECDC_ABILITY_CAST = "(.+) casts (.+).";
+		ECDC_GAINS = "(.+) gains (.+)."
+		ECDC_ABILITY_HITS = "(.+)'s (.+) hits (.+) for (.+)"
+		ECDC_ABILITY_CRITS = "(.+)'s (.+) crits (.+) for (.+)"
+		ECDC_ABILITY_ABSORB = "(.+)'s (.+) is absorbed by (.+)."
+		ECDC_ABILITY_PERFORM = "(.+) performs (.+)."
+		ECDC_ABILITY_CHARGE = "(.+) gains (.+) Rage from (.+)'s Charge."
+		ECDC_ABILITY_CAST = "(.+) casts (.+)."
 
-		ECDC_LoadSkills();
+		ECDC_LoadSkills()
 
-		ECDC_Button:SetNormalTexture("Interface\\Buttons\\UI-MicroButton-Abilities-Up.blp");
+		ECDC_Button:SetNormalTexture([[Interface\Buttons\UI-MicroButton-Abilities-Up.blp]])
 
-		this:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_FRIENDLYPLAYER_DAMAGE");
-		this:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_FRIENDLYPLAYER_BUFFS");
-		this:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_HOSTILEPLAYER_DAMAGE");
-		this:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_HOSTILEPLAYER_BUFFS");
-		this:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_PARTY_DAMAGE");
-		this:RegisterEvent("CHAT_MSG_SPELL_FRIENDLYPLAYER_DAMAGE");
-		this:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_PARTY_BUFFS");
-		this:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_SELF_DAMAGE");
-		this:RegisterEvent("CHAT_MSG_SPELL_FRIENDLYPLAYER_BUFF");
-		this:RegisterEvent("CHAT_MSG_SPELL_HOSTILEPLAYER_DAMAGE");
-		this:RegisterEvent("CHAT_MSG_SPELL_HOSTILEPLAYER_BUFF");
-		this:RegisterEvent("CHAT_MSG_SPELL_PARTY_DAMAGE");
-		this:RegisterEvent("CHAT_MSG_SPELL_PARTY_BUFF");
+		this:RegisterEvent('CHAT_MSG_SPELL_PERIODIC_FRIENDLYPLAYER_DAMAGE')
+		this:RegisterEvent('CHAT_MSG_SPELL_PERIODIC_FRIENDLYPLAYER_BUFFS')
+		this:RegisterEvent('CHAT_MSG_SPELL_PERIODIC_HOSTILEPLAYER_DAMAGE')
+		this:RegisterEvent('CHAT_MSG_SPELL_PERIODIC_HOSTILEPLAYER_BUFFS')
+		this:RegisterEvent('CHAT_MSG_SPELL_PERIODIC_PARTY_DAMAGE')
+		this:RegisterEvent('CHAT_MSG_SPELL_FRIENDLYPLAYER_DAMAGE')
+		this:RegisterEvent('CHAT_MSG_SPELL_PERIODIC_PARTY_BUFFS')
+		this:RegisterEvent('CHAT_MSG_SPELL_PERIODIC_SELF_DAMAGE')
+		this:RegisterEvent('CHAT_MSG_SPELL_FRIENDLYPLAYER_BUFF')
+		this:RegisterEvent('CHAT_MSG_SPELL_HOSTILEPLAYER_DAMAGE')
+		this:RegisterEvent('CHAT_MSG_SPELL_HOSTILEPLAYER_BUFF')
+		this:RegisterEvent('CHAT_MSG_SPELL_PARTY_DAMAGE')
+		this:RegisterEvent('CHAT_MSG_SPELL_PARTY_BUFF')
 
 		ECDC_ToggleStack()
 		if ECDC_Locked then
@@ -124,123 +128,125 @@ function ECDC_OnEvent(event)
 	-- For gains
 	for player, spell in string.gfind(arg1, ECDC_GAINS) do
 		if (ECDC_GetSkillCooldown(spell) ~= ECDC_ErrCountdown) then
-			table.insert(ECDC_UsedSkills, {player = player, skill = spell, info = ECDC_GetInfo(spell), texture = ECDC_GetTexture(spell), countdown = ECDC_GetSkillCooldown(spell), started = GetTime()});
+			table.insert(ECDC_UsedSkills, {player = player, skill = spell, info = ECDC_GetInfo(spell), texture = ECDC_GetTexture(spell), countdown = ECDC_GetSkillCooldown(spell), started = GetTime()})
 		end
 	end
 	-- For performs
 	for player, spell in string.gfind(arg1, ECDC_ABILITY_PERFORM) do
 		if (ECDC_GetSkillCooldown(spell) ~= ECDC_ErrCountdown) then
-			table.insert(ECDC_UsedSkills, {player = player, skill = spell, info = ECDC_GetInfo(spell), texture = ECDC_GetTexture(spell), countdown = ECDC_GetSkillCooldown(spell), started = GetTime()});
+			table.insert(ECDC_UsedSkills, {player = player, skill = spell, info = ECDC_GetInfo(spell), texture = ECDC_GetTexture(spell), countdown = ECDC_GetSkillCooldown(spell), started = GetTime()})
 		end
 	end
 	-- For hits
 	for player, spell, afflictee, damage in string.gfind(arg1, ECDC_ABILITY_HITS) do
 		if (ECDC_GetSkillCooldown(spell) ~= ECDC_ErrCountdown) then
-			table.insert(ECDC_UsedSkills, {player = player, skill = spell, info = ECDC_GetInfo(spell), texture = ECDC_GetTexture(spell), countdown = ECDC_GetSkillCooldown(spell), started = GetTime()});
+			table.insert(ECDC_UsedSkills, {player = player, skill = spell, info = ECDC_GetInfo(spell), texture = ECDC_GetTexture(spell), countdown = ECDC_GetSkillCooldown(spell), started = GetTime()})
 		end
 	end
 	-- For crits
 	for player, spell, afflictee, damage in string.gfind(arg1, ECDC_ABILITY_CRITS) do
 		if (ECDC_GetSkillCooldown(spell) ~= ECDC_ErrCountdown) then
-			table.insert(ECDC_UsedSkills, {player = player, skill = spell, info = ECDC_GetInfo(spell), texture = ECDC_GetTexture(spell), countdown = ECDC_GetSkillCooldown(spell), started = GetTime()});
+			table.insert(ECDC_UsedSkills, {player = player, skill = spell, info = ECDC_GetInfo(spell), texture = ECDC_GetTexture(spell), countdown = ECDC_GetSkillCooldown(spell), started = GetTime()})
 		end
 	end
 	-- For absorbs
 	for player, spell, afflictee in string.gfind(arg1, ECDC_ABILITY_ABSORB) do
 		if (ECDC_GetSkillCooldown(spell) ~= ECDC_ErrCountdown) then
-			table.insert(ECDC_UsedSkills, {player = player, skill = spell, info = ECDC_GetInfo(spell), texture = ECDC_GetTexture(spell), countdown = ECDC_GetSkillCooldown(spell), started = GetTime()});
+			table.insert(ECDC_UsedSkills, {player = player, skill = spell, info = ECDC_GetInfo(spell), texture = ECDC_GetTexture(spell), countdown = ECDC_GetSkillCooldown(spell), started = GetTime()})
 		end
 	end
 	-- For charge (Warriors)
 	for player, rage, player in string.gfind(arg1, ECDC_ABILITY_CHARGE) do
-		if (ECDC_GetSkillCooldown("Charge") ~= ECDC_ErrCountdown) then
-			table.insert(ECDC_UsedSkills, {player = player, skill = "Charge", info = ECDC_GetInfo("Charge"), texture = ECDC_GetTexture("Charge"), countdown = ECDC_GetSkillCooldown("Charge"), started = GetTime()});
+		if (ECDC_GetSkillCooldown('Charge') ~= ECDC_ErrCountdown) then
+			table.insert(ECDC_UsedSkills, {player = player, skill = 'Charge', info = ECDC_GetInfo('Charge'), texture = ECDC_GetTexture('Charge'), countdown = ECDC_GetSkillCooldown('Charge'), started = GetTime()})
 		end
 	end
 	-- For casts
 	for player, spell in string.gfind(arg1, ECDC_ABILITY_CAST) do
 		if (ECDC_GetSkillCooldown(spell) ~= ECDC_ErrCountdown) then
-			table.insert(ECDC_UsedSkills, {player = player, skill = spell, info = ECDC_GetInfo(spell), texture = ECDC_GetTexture(spell), countdown = ECDC_GetSkillCooldown(spell), started = GetTime()});
+			table.insert(ECDC_UsedSkills, {player = player, skill = spell, info = ECDC_GetInfo(spell), texture = ECDC_GetTexture(spell), countdown = ECDC_GetSkillCooldown(spell), started = GetTime()})
 		end
 	end
 end
 
-function ECDC_OnUpdate(elapsed)
-	ECDC_TimeSinceLastUpdate = ECDC_TimeSinceLastUpdate + elapsed;
-	if (ECDC_TimeSinceLastUpdate > ECDC_UpdateInterval) then
-		ECDC_TimeSinceLastUpdate = 0;
-		-- Spit out the infoz
+function ECDC_OnUpdate()
+	if ECDC_Locked then
+		local i = 1
 
-		if ECDC_Locked then
-			local i = 1
+		local temp = {}
+		sort(ECDC_UsedSkills, function(a, b) local ta, tb = a.started + a.countdown - GetTime(), b.started + b.countdown - GetTime() return ta < tb or tb == ta and a.skill < b.skill end)
+		for k, v in ECDC_UsedSkills do
+			local timeleft = v.started + v.countdown - GetTime()
 
-			local temp = {}
-			sort(ECDC_UsedSkills, function(a, b) local ta, tb = a.countdown - (GetTime() - a.started), b.countdown - (GetTime() - b.started) return ta < tb or tb == ta and a.skill < b.skill end)
-			for k, v in ECDC_UsedSkills do
-				local timeleft = ceil(v.countdown - (GetTime() - v.started))
-				--	  Only show CD for our target if there is time left on the CD      Loop through Stuff           Warrior enrage isnt a CD, Druid Enrage is!
-				if timeleft > 0 then
-					tinsert(temp, v)
+			if timeleft > 0 then
+				tinsert(temp, v)
 
-					if v.player == UnitName("target") or v.player == '_temp' and i <= 10 and not (UnitClass("target") == "Warrior" and v.skill == "Enrage") and ECDC_ToolTips[i-1] ~= v.skill then
-						ECDC_ToolTips[i] = v.skill;
-						ECDC_ToolTipDetails[i] = v.info;
-						if timeleft > 60 then
-							timeleft = floor((timeleft/60)*10)/10;
-							getglobal("ECDC_CD"..i):SetTextColor(0, 1, 0);
-						else
-							getglobal("ECDC_CD"..i):SetTextColor(1, 1, 0);
-						end
-						getglobal("ECDC_CD"..i):SetText(timeleft);
-						getglobal("ECDC_Tex"..i):SetTexture([[Interface\Icons\]]..v.texture);
-						getglobal("ECDC_Frame"..i):Show();
-						getglobal("ECDC_CD"..i):Show();
-						getglobal("ECDC_Tex"..i):Show();
-						i = i + 1;
+				-- Warrior enrage isnt a CD, Druid Enrage is!
+				if v.player == UnitName('target') and i <= 10 and not (UnitClass('target') == 'Warrior' and v.skill == 'Enrage') and ECDC_ToolTips[i-1] ~= v.skill then
+					if timeleft <= 5 then
+						getglobal('ECDC_Tex'..i):SetAlpha(1 - (math.sin(GetTime() * 1.3 * math.pi) + 1) / 2 * .7)
+					else
+						getglobal('ECDC_Tex'..i):SetAlpha(1)
 					end
+
+					ECDC_ToolTips[i] = v.skill
+					ECDC_ToolTipDetails[i] = v.info
+					timeleft = ceil(timeleft)
+					if timeleft > 60 then
+						timeleft = ceil((timeleft/60)*10)/10
+						getglobal('ECDC_CD'..i):SetTextColor(0, 1, 0)
+					else
+						getglobal('ECDC_CD'..i):SetTextColor(1, 1, 0)
+					end
+					getglobal('ECDC_CD'..i):SetText(timeleft)
+					getglobal('ECDC_Tex'..i):SetTexture([[Interface\Icons\]]..v.texture)
+					getglobal('ECDC_Frame'..i):Show()
+					getglobal('ECDC_CD'..i):Show()
+					getglobal('ECDC_Tex'..i):Show()
+					i = i + 1
 				end
 			end
-			ECDC_UsedSkills = temp
+		end
+		ECDC_UsedSkills = temp
 
-			while i <= 10 do
-				getglobal("ECDC_Frame"..i):Hide();
-				getglobal("ECDC_CD"..i):Hide();
-				getglobal("ECDC_Tex"..i):Hide();
-				i = i + 1;
-			end
+		while i <= 10 do
+			getglobal('ECDC_Frame'..i):Hide()
+			getglobal('ECDC_CD'..i):Hide()
+			getglobal('ECDC_Tex'..i):Hide()
+			i = i + 1
 		end
 	end
 end
 
 function ECDC_GetTexture(skill)
-	for k, v in pairs(ECDC_Skills) do 
-		if (v.name == skill) then
-			SkillTexture = v.icon;
+	for k, v in ECDC_Skills do 
+		if v.name == skill then
+			SkillTexture = v.icon
 		end
-	end;
-	return SkillTexture;	
+	end
+	return SkillTexture	
 end
 
 function ECDC_GetInfo(skill)
-	for k, v in pairs(ECDC_Skills) do 
-		if (v.name == skill) then
-			SkillInfo = v.desc;
+	for k, v in ECDC_Skills do 
+		if v.name == skill then
+			SkillInfo = v.desc
 		end
-	end;
-	return SkillInfo;	
+	end
+	return SkillInfo	
 end
 
 function ECDC_GetSkillCooldown(skill)
-	local SkillCountdown = 30;
-	for k, v in pairs(ECDC_Skills) do 
-		if (v.name == skill) then
-			SkillCountdown = v.cooldown;
-			break;
+	local SkillCountdown = 30
+	for k, v in ECDC_Skills do 
+		if v.name == skill then
+			SkillCountdown = v.cooldown
+			break
 		else
-			SkillCountdown = ECDC_ErrCountdown;
+			SkillCountdown = ECDC_ErrCountdown
 		end
-	end;
-	return SkillCountdown;
+	end
+	return SkillCountdown
 end
 
 function ECDC_OnDragStart()
@@ -459,7 +465,7 @@ function ECDC_LoadSkills()
 		{name = "Tiger's Fury", cooldown = 1, desc = "Increases damage done by 40 for 6 sec.", icon = "Ability_Mount_JungleTiger"},
 		{name = "Rebirth", cooldown = (30*60), desc = "Returns the spirit to the body, restoring a dead target to life with 2200 health and 2800 mana.", icon = "Spell_Nature_Reincarnation"},
 		{name = "Tranquility", cooldown = (5*60), desc = "Regenerates all nearby group members for 294 every 2 seconds for 10 sec. Druid must channel to maintain the spell.", icon = "Spell_Nature_Tranquility"}
-	};
+	}
 end
 
 SLASH_ECDC1 = '/ecdc'
