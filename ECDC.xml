@@ -8,7 +8,6 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 			<Anchors>
 				<Anchor point="CENTER"/>
 		</Anchors>
-
 		<Scripts>
 			<OnLoad>
 				this:RegisterEvent("ADDON_LOADED")
