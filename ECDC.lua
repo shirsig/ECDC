@@ -8,6 +8,7 @@ function ECDC:Lock()
 	for i=1,10 do
 		getglobal('ECDC_Tex'..i):Hide()
 	end
+	ECDC_Locked = true
 end
 
 function ECDC:Unlock()
@@ -20,6 +21,7 @@ function ECDC:Unlock()
 		getglobal('ECDC_Tex'..i):Show()
 		getglobal('ECDC_CD'..i):Hide()
 	end
+	ECDC_Locked = false
 end
 
 function ECDC_ToggleStack()
@@ -71,8 +73,12 @@ function ECDC_ToggleStack()
 end
 
 function ECDC_Click()
-	ECDC_Orientation = mod(ECDC_Orientation, 4) + 1
-	ECDC_ToggleStack()
+	if arg1 == 'LeftButton' then
+		ECDC_Orientation = mod(ECDC_Orientation, 4) + 1
+		ECDC_ToggleStack()
+	elseif arg1 == 'RightButton' then
+		ECDC:Lock()
+	end
 end
 
 function ECDC_ToolTip(tooltipnum)
@@ -470,10 +476,9 @@ end
 
 SLASH_ECDC1 = '/ecdc'
 function SlashCmdList.ECDC()
-	ECDC_Locked = not ECDC_Locked
 	if ECDC_Locked then
-		ECDC:Lock()
-	else
 		ECDC:Unlock()
+	else
+		ECDC:Lock()
 	end
 end

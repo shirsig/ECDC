@@ -35,19 +35,22 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				<Scripts>
 					<OnLoad>
 						this:RegisterForDrag("LeftButton")
+						this:RegisterForDrag("LeftButton")
 					</OnLoad>
 					<OnDragStart>
-						ECDC_OnDragStart();
+						ECDC_OnDragStart()
 					</OnDragStart>
 					<OnDragStop>
-						ECDC_OnDragStop();
+						ECDC_OnDragStop()
 					</OnDragStop>
 					<OnClick>
-						ECDC_Click();
+						ECDC_Click()
 					</OnClick>
 					<OnEnter>
                 		GameTooltip_SetDefaultAnchor(GameTooltip, this)
-                		GameTooltip:AddLine('ECDC', 1, 1, 1, true)
+                		GameTooltip:AddLine("Enemy cooldowns")
+						GameTooltip:AddLine("Left-click/drag to position", .8, .8, .8)
+						GameTooltip:AddLine("Right-click to lock", .8, .8, .8)
                 		GameTooltip:Show()
 					</OnEnter>
 					<OnLeave>
