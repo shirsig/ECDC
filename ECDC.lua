@@ -293,6 +293,7 @@ function ECDC:StopCooldown(player, ...)
 				stop = true
 			end
 		end
+		if not stop then
 			tinsert(temp, skill)
 		end
 	end
@@ -374,7 +375,7 @@ function ECDC_LoadSkills()
 		{name = "Repentance", cooldown = 60, desc = "Unknown!", icon = "Spell_Holy_PrayerOfHealing"},
 
 		-- Mage
-		{name = "Blink", cooldown = 15, desc = "Teleports the caster 20 yards forward, unless something is in the way. Also frees the caster from stuns and bonds.", icon = "Spell_Arcane_Blink", trigger = function(player) ECDC:StopCooldown(player, 'Ice Block', 'Cone of Cold', 'Frost Ward', 'Ice Barrier', 'Frost Nova') end},
+		{name = "Blink", cooldown = 15, desc = "Teleports the caster 20 yards forward, unless something is in the way. Also frees the caster from stuns and bonds.", icon = "Spell_Arcane_Blink"},
 		{name = "Portal: Darnassus", cooldown = 60, desc = "Creates a portal, teleporting group members that use it to Darnassus.", icon = "Spell_Arcane_PortalDarnassus"},
 		{name = "Portal: Ironforge", cooldown = 60, desc = "Creates a portal, teleporting group members that use it to Ironforge.", icon = "Spell_Arcane_PortalIronForge"},
 		{name = "Portal: Orgrimmar", cooldown = 60, desc = "Creates a portal, teleporting group members that use it to Orgrimmar.", icon = "Spell_Arcane_PortalOrgrimmar"},
