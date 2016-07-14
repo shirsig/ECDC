@@ -133,46 +133,47 @@ function ECDC_OnEvent(event)
 		end
 		return
 	end
+
 	-- For gains
 	for player, spell in string.gfind(arg1, ECDC_GAINS) do
-		if (ECDC_GetSkillCooldown(spell) ~= ECDC_ErrCountdown) then
-			table.insert(ECDC_UsedSkills, {player = player, skill = spell, info = ECDC_GetInfo(spell), texture = ECDC_GetTexture(spell), countdown = ECDC_GetSkillCooldown(spell), started = GetTime()})
+		if ECDC_GetSkillCooldown(spell) ~= ECDC_ErrCountdown then
+			ECDC:StartCooldown(player, spell)
 		end
 	end
 	-- For performs
 	for player, spell in string.gfind(arg1, ECDC_ABILITY_PERFORM) do
-		if (ECDC_GetSkillCooldown(spell) ~= ECDC_ErrCountdown) then
-			table.insert(ECDC_UsedSkills, {player = player, skill = spell, info = ECDC_GetInfo(spell), texture = ECDC_GetTexture(spell), countdown = ECDC_GetSkillCooldown(spell), started = GetTime()})
+		if ECDC_GetSkillCooldown(spell) ~= ECDC_ErrCountdown then
+			ECDC:StartCooldown(player, spell)
 		end
 	end
 	-- For hits
 	for player, spell, afflictee, damage in string.gfind(arg1, ECDC_ABILITY_HITS) do
-		if (ECDC_GetSkillCooldown(spell) ~= ECDC_ErrCountdown) then
-			table.insert(ECDC_UsedSkills, {player = player, skill = spell, info = ECDC_GetInfo(spell), texture = ECDC_GetTexture(spell), countdown = ECDC_GetSkillCooldown(spell), started = GetTime()})
+		if ECDC_GetSkillCooldown(spell) ~= ECDC_ErrCountdown then
+			ECDC:StartCooldown(player, spell)
 		end
 	end
 	-- For crits
 	for player, spell, afflictee, damage in string.gfind(arg1, ECDC_ABILITY_CRITS) do
-		if (ECDC_GetSkillCooldown(spell) ~= ECDC_ErrCountdown) then
-			table.insert(ECDC_UsedSkills, {player = player, skill = spell, info = ECDC_GetInfo(spell), texture = ECDC_GetTexture(spell), countdown = ECDC_GetSkillCooldown(spell), started = GetTime()})
+		if ECDC_GetSkillCooldown(spell) ~= ECDC_ErrCountdown then
+			ECDC:StartCooldown(player, spell)
 		end
 	end
 	-- For absorbs
 	for player, spell, afflictee in string.gfind(arg1, ECDC_ABILITY_ABSORB) do
-		if (ECDC_GetSkillCooldown(spell) ~= ECDC_ErrCountdown) then
-			table.insert(ECDC_UsedSkills, {player = player, skill = spell, info = ECDC_GetInfo(spell), texture = ECDC_GetTexture(spell), countdown = ECDC_GetSkillCooldown(spell), started = GetTime()})
+		if ECDC_GetSkillCooldown(spell) ~= ECDC_ErrCountdown then
+			ECDC:StartCooldown(player, spell)
 		end
 	end
 	-- For charge (Warriors)
 	for player, rage, player in string.gfind(arg1, ECDC_ABILITY_CHARGE) do
-		if (ECDC_GetSkillCooldown('Charge') ~= ECDC_ErrCountdown) then
-			table.insert(ECDC_UsedSkills, {player = player, skill = 'Charge', info = ECDC_GetInfo('Charge'), texture = ECDC_GetTexture('Charge'), countdown = ECDC_GetSkillCooldown('Charge'), started = GetTime()})
+		if ECDC_GetSkillCooldown('Charge') ~= ECDC_ErrCountdown then
+			ECDC:StartCooldown(player, spell)
 		end
 	end
 	-- For casts
 	for player, spell in string.gfind(arg1, ECDC_ABILITY_CAST) do
-		if (ECDC_GetSkillCooldown(spell) ~= ECDC_ErrCountdown) then
-			table.insert(ECDC_UsedSkills, {player = player, skill = spell, info = ECDC_GetInfo(spell), texture = ECDC_GetTexture(spell), countdown = ECDC_GetSkillCooldown(spell), started = GetTime()})
+		if ECDC_GetSkillCooldown(spell) ~= ECDC_ErrCountdown then
+			ECDC:StartCooldown(player, spell)
 		end
 	end
 end
@@ -226,22 +227,28 @@ function ECDC_OnUpdate()
 	end
 end
 
+function ECDC_GetTrigger(skill)
+	for k, v in ECDC_Skills do 
+		if v.name == skill then
+			return v.trigger
+		end
+	end
+end
+
 function ECDC_GetTexture(skill)
 	for k, v in ECDC_Skills do 
 		if v.name == skill then
-			SkillTexture = v.icon
+			return v.icon
 		end
 	end
-	return SkillTexture	
 end
 
 function ECDC_GetInfo(skill)
 	for k, v in ECDC_Skills do 
 		if v.name == skill then
-			SkillInfo = v.desc
+			return v.desc
 		end
-	end
-	return SkillInfo	
+	end	
 end
 
 function ECDC_GetSkillCooldown(skill)
@@ -264,6 +271,30 @@ end
 function ECDC_OnDragStop()
 	ECDC_Frame:StopMovingOrSizing()
 	ECDC_Position = { ECDC_Frame:GetLeft(), ECDC_Frame:GetBottom() }
+end
+
+function ECDC:StartCooldown(player, ...)
+	for i=1,arg.n do
+		local spell = arg[i]
+		local trigger = ECDC_GetTrigger(spell)
+		if trigger then
+			trigger()
+		end
+		table.insert(ECDC_UsedSkills, {player = player, skill = spell, info = ECDC_GetInfo(spell), texture = ECDC_GetTexture(spell), countdown = ECDC_GetSkillCooldown(spell), started = GetTime()})
+	end
+end
+
+function ECDC:StopCooldown(player, ...)
+	local temp = {}
+	table.foreach(ECDC_UsedSkills, function() 
+		for i=1,arg.n do
+			if arg[i] == skill.skill then
+				return
+			end
+			tinsert(temp, skill)
+		end
+	end)
+	ECDC_UsedSkills = temp
 end
 
 function ECDC_LoadSkills()
@@ -474,7 +505,7 @@ function ECDC_LoadSkills()
 
 		{name = "Faerie Fire (Feral)", cooldown = 6, desc = "Unknown!", icon = "Spell_Nature_FaerieFire"},
 		{name = "Feral Charge", cooldown = 15, desc = "Unknown!", icon = "Ability_Hunter_Pet_Bear"},
-		{name = "Nature's Swiftness", cooldown = 15, desc = "Unknown!", icon = "Spell_Nature_RavenForm"},
+		-- {name = "Nature's Swiftness", cooldown = 3*60, desc = "Unknown!", icon = "Spell_Nature_RavenForm"},
 		{name = "Swiftmend", cooldown = 15, desc = "Unknown!", icon = "Inv_Relics_IdolOfRejuvenation"},
 	}
 end
