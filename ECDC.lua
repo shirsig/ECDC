@@ -286,7 +286,7 @@ end
 
 function ECDC:StopCooldown(player, ...)
 	local temp = {}
-	table.foreach(ECDC_UsedSkills, function(skill) 
+	table.foreach(ECDC_UsedSkills, function(_, skill)
 		for i=1,arg.n do
 			if skill.player == player and arg[i] == skill.skill then
 				return
