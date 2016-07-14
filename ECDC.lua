@@ -278,7 +278,7 @@ function ECDC:StartCooldown(player, ...)
 		local spell = arg[i]
 		local trigger = ECDC_GetTrigger(spell)
 		if trigger then
-			trigger()
+			trigger(player)
 		end
 		table.insert(ECDC_UsedSkills, {player = player, skill = spell, info = ECDC_GetInfo(spell), texture = ECDC_GetTexture(spell), countdown = ECDC_GetSkillCooldown(spell), started = GetTime()})
 	end
@@ -286,7 +286,7 @@ end
 
 function ECDC:StopCooldown(player, ...)
 	local temp = {}
-	table.foreach(ECDC_UsedSkills, function() 
+	table.foreach(ECDC_UsedSkills, function(skill) 
 		for i=1,arg.n do
 			if arg[i] == skill.skill then
 				return
@@ -390,7 +390,7 @@ function ECDC_LoadSkills()
 		{name = "Presence of Mind", cooldown = 3*60, desc = "Unknown!", icon = "Spell_Nature_EnchantArmor"},
 		{name = "Arcane Power", cooldown = 3*60, desc = "Unknown!", icon = "Spell_Nature_Lightning"},
 		{name = "Combustion", cooldown = 3*60, desc = "Unknown!", icon = "Spell_Fire_SealOfFire"},
-		{name = "Cold Snap", cooldown = 10*60, desc = "Unknown!", icon = "Spell_Frost_WizardMark"},
+		{name = "Cold Snap", cooldown = 10*60, desc = "Unknown!", icon = "Spell_Frost_WizardMark", trigger = function(player) ECDC:StopCooldown(player, 'Ice Block', 'Cone of Cold', 'Frost Ward', 'Ice Barrier', 'Frost Nova') end},
 		{name = "Ice Block", cooldown = 5*60, desc = "Unknown!", icon = "Spell_Frost_Frost"},
 
 		-- Rogues
