@@ -407,7 +407,7 @@ function ECDC_LoadSkills()
 
 		{name = "Blade Flurry", cooldown = 2*60, desc = "Increases your attack speed by 20%. In addition, attacks strike an additional nearby opponent. Lasts 15 sec.", icon = "Ability_Warrior_PunishingBlow"},
 		{name = "Adrenaline Rush", cooldown = 6*60, desc = "Increases your Energy regeneration rate by 100% for 15 sec.", icon = "Spell_Shadow_ShadowWordDominate"},
-		{name = "Preparation", cooldown = 10*60, desc = "When activated, this ability immediately finishes the cooldown of your other Rogue abilities.", icon = "Spell_Shadow_AntiShadow"},
+		{name = "Preparation", cooldown = 10*60, desc = "When activated, this ability immediately finishes the cooldown of your other Rogue abilities.", icon = "Spell_Shadow_AntiShadow", trigger = function(player) ECDC:StopCooldown(player, 'Kidney Shot', 'Evasion', 'Feint', 'Gouge', 'Kick', 'Sprint', 'Blind', 'Distract', 'Stealth', 'Blade Flurry', 'Adrenaline Rush', 'Ghostly Strike', 'Premeditation', 'Cold Blood') end},
 		{name = "Ghostly Strike", cooldown = 20, desc = "A strike that deals 125% of weapon damage and increases your chance to dodge by 15% for 7 sec. Awards 1 combo points.", icon = "Spell_Shadow_Curse"},
 		{name = "Premeditation", cooldown = 60, desc = "When used, adds two combo points to your target. You must add to or use those combo points within 10 sec or the combo points are lost.", icon = "Spell_Shadow_Possession"},
 		{name = "Cold Blood", cooldown = 3*60, desc = "When activated, increases the critical strike chance of your next Sinister Strike, Backstab, Ambush, or Eviscerate by 100%.", icon = "Spell_Ice_Lament"},
