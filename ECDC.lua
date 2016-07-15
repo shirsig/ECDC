@@ -146,43 +146,43 @@ function ECDC_OnEvent(event)
 
 	-- For gains
 	for player, spell in string.gfind(arg1, ECDC_GAINS) do
-		if ECDC_GetSkillCooldown(spell) ~= ECDC_ErrCountdown then
+		if ECDC_GetSkillCooldown(spell) then
 			ECDC:StartCooldown(player, spell)
 		end
 	end
 	-- For performs
 	for player, spell in string.gfind(arg1, ECDC_ABILITY_PERFORM) do
-		if ECDC_GetSkillCooldown(spell) ~= ECDC_ErrCountdown then
+		if ECDC_GetSkillCooldown(spell) then
 			ECDC:StartCooldown(player, spell)
 		end
 	end
 	-- For hits
 	for player, spell, afflictee, damage in string.gfind(arg1, ECDC_ABILITY_HITS) do
-		if ECDC_GetSkillCooldown(spell) ~= ECDC_ErrCountdown then
+		if ECDC_GetSkillCooldown(spell) then
 			ECDC:StartCooldown(player, spell)
 		end
 	end
 	-- For crits
 	for player, spell, afflictee, damage in string.gfind(arg1, ECDC_ABILITY_CRITS) do
-		if ECDC_GetSkillCooldown(spell) ~= ECDC_ErrCountdown then
+		if ECDC_GetSkillCooldown(spell) then
 			ECDC:StartCooldown(player, spell)
 		end
 	end
 	-- For absorbs
 	for player, spell, afflictee in string.gfind(arg1, ECDC_ABILITY_ABSORB) do
-		if ECDC_GetSkillCooldown(spell) ~= ECDC_ErrCountdown then
+		if ECDC_GetSkillCooldown(spell) then
 			ECDC:StartCooldown(player, spell)
 		end
 	end
 	-- For charge (Warriors)
 	for player, rage, player in string.gfind(arg1, ECDC_ABILITY_CHARGE) do
-		if ECDC_GetSkillCooldown('Charge') ~= ECDC_ErrCountdown then
-			ECDC:StartCooldown(player, spell)
+		if ECDC_GetSkillCooldown('Charge') then
+			ECDC:StartCooldown(player, 'Charge')
 		end
 	end
 	-- For casts
 	for player, spell in string.gfind(arg1, ECDC_ABILITY_CAST) do
-		if ECDC_GetSkillCooldown(spell) ~= ECDC_ErrCountdown then
+		if ECDC_GetSkillCooldown(spell) then
 			ECDC:StartCooldown(player, spell)
 		end
 	end
@@ -270,16 +270,11 @@ function ECDC_GetInfo(skill)
 end
 
 function ECDC_GetSkillCooldown(skill)
-	local SkillCountdown = 30
 	for k, v in ECDC_Skills do 
 		if v.name == skill then
-			SkillCountdown = v.cooldown
-			break
-		else
-			SkillCountdown = ECDC_ErrCountdown
+			return v.cooldown
 		end
 	end
-	return SkillCountdown
 end
 
 function ECDC_OnDragStart()
@@ -296,6 +291,7 @@ function ECDC:StartCooldown(player, ...)
 		local spell = arg[i]
 
 		if not ECDC:Ignored(spell) then
+			Aux.log(spell)
 			local trigger = ECDC_GetTrigger(spell)
 			if trigger then
 				trigger(player)
