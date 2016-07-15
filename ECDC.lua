@@ -291,7 +291,6 @@ function ECDC:StartCooldown(player, ...)
 		local spell = arg[i]
 
 		if not ECDC:Ignored(spell) then
-			Aux.log(spell)
 			local trigger = ECDC_GetTrigger(spell)
 			if trigger then
 				trigger(player)
