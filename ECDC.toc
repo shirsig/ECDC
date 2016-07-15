@@ -1,5 +1,5 @@
 ## Interface: 11200
 ## Title: Enemy Cooldown Count
 ## Author: shirsig
-## SavedVariables: ECDC_Position, ECDC_Orientation, ECDC_Locked
+## SavedVariables: ECDC_Position, ECDC_Orientation, ECDC_Locked, ECDC_IgnoreList, ECDC_ClickThrough
 ECDC.xml

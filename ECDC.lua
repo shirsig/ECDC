@@ -1,5 +1,8 @@
 local ECDC = {}
 
+ECDC_IgnoreList = "ignoredcd1,ignoredcd2,ignoredcd3"
+ECDC_ClickThrough = false
+
 ECDC_Position = {UIParent:GetWidth()/2, UIParent:GetHeight()/2}
 ECDC_Orientation = 1
 
@@ -131,6 +134,13 @@ function ECDC_OnEvent(event)
 		else
 			ECDC:Unlock()
 		end
+
+		if ECDC_ClickThrough then
+			for i=1,10 do
+				getglobal('ECDC_Frame'..i):EnableMouse(false)
+			end
+		end
+
 		return
 	end
 
@@ -227,6 +237,14 @@ function ECDC_OnUpdate()
 	end
 end
 
+function ECDC:Ignored(name)
+	for entry in string.gfind(ECDC_IgnoreList, '[^,]+') do
+		if strupper(entry) == strupper(name) then
+			return true
+		end
+	end
+end
+
 function ECDC_GetTrigger(skill)
 	for k, v in ECDC_Skills do 
 		if v.name == skill then
@@ -276,11 +294,14 @@ end
 function ECDC:StartCooldown(player, ...)
 	for i=1,arg.n do
 		local spell = arg[i]
-		local trigger = ECDC_GetTrigger(spell)
-		if trigger then
-			trigger(player)
+
+		if not ECDC:Ignored(spell) then
+			local trigger = ECDC_GetTrigger(spell)
+			if trigger then
+				trigger(player)
+			end
+			table.insert(ECDC_UsedSkills, {player = player, skill = spell, info = ECDC_GetInfo(spell), texture = ECDC_GetTexture(spell), countdown = ECDC_GetSkillCooldown(spell), started = GetTime()})
 		end
-		table.insert(ECDC_UsedSkills, {player = player, skill = spell, info = ECDC_GetInfo(spell), texture = ECDC_GetTexture(spell), countdown = ECDC_GetSkillCooldown(spell), started = GetTime()})
 	end
 end
 
